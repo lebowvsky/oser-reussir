@@ -103,55 +103,57 @@ const steps: readonly Step[] = [
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .accompagnement {
-  background-color: var(--color-bg);
+  background-color: color("cream");
 }
 
 .accompagnement__header {
   max-width: 44rem;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: $spacing-2xl;
 }
 
 .accompagnement__timeline {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
-  margin-bottom: var(--space-2xl);
+  gap: $spacing-lg;
+  margin-bottom: $spacing-2xl;
   counter-reset: step;
   position: relative;
 }
 
 .accompagnement__step {
   display: flex;
-  gap: var(--space-lg);
-  padding: var(--space-xl);
-  background-color: var(--color-surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  transition: transform var(--dur-med) var(--ease),
-    box-shadow var(--dur-med) var(--ease);
+  gap: $spacing-lg;
+  padding: $spacing-xl;
+  background-color: color("surface");
+  border-radius: $radius-lg;
+  border: 1px solid color("border");
+  transition: transform $duration-medium $ease,
+    box-shadow $duration-medium $ease;
 }
 .accompagnement__step:hover {
   transform: translateX(4px);
-  box-shadow: var(--shadow-soft);
+  box-shadow: $shadow-soft;
 }
 
 .accompagnement__step--highlight {
   background: linear-gradient(
     135deg,
-    var(--color-surface) 0%,
-    rgba(201, 123, 91, 0.08) 100%
+    color("surface") 0%,
+    alpha("terracotta", 0.08) 100%
   );
-  border-color: var(--color-terracotta-soft);
+  border-color: tint("terracotta", 14);
 }
 
 .accompagnement__number {
   flex-shrink: 0;
-  font-family: var(--font-display);
-  font-size: var(--fs-3xl);
+  font-family: $font-display;
+  font-size: $font-size-3xl;
   font-weight: 700;
-  color: var(--color-terracotta);
+  color: color("terracotta");
   line-height: 1;
   min-width: 72px;
 }
@@ -161,30 +163,30 @@ const steps: readonly Step[] = [
 }
 
 .accompagnement__step-title {
-  font-size: var(--fs-lg);
-  margin-bottom: var(--space-xs);
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-xs;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: $spacing-sm;
   flex-wrap: wrap;
 }
 
 .accompagnement__badge {
   display: inline-block;
   padding: 0.25rem 0.625rem;
-  background-color: var(--color-sage);
-  color: var(--color-white);
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
+  background-color: color("primary");
+  color: color("surface");
+  font-family: $font-body;
+  font-size: $font-size-xs;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  border-radius: var(--radius-pill);
+  border-radius: $radius-pill;
 }
 
 .accompagnement__body p {
-  font-size: var(--fs-md);
-  color: var(--color-text-soft);
+  font-size: $font-size-md;
+  color: color("ink-soft");
 }
 
 /* CTA card */
@@ -192,23 +194,23 @@ const steps: readonly Step[] = [
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-xl);
-  padding: var(--space-xl) var(--space-2xl);
+  gap: $spacing-xl;
+  padding: $spacing-xl $spacing-2xl;
   background: linear-gradient(
     135deg,
-    var(--color-terracotta) 0%,
-    var(--color-terracotta-dark) 100%
+    color("terracotta") 0%,
+    shade("terracotta", 16) 100%
   );
-  color: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-medium);
+  color: color("surface");
+  border-radius: $radius-xl;
+  box-shadow: $shadow-medium;
   flex-wrap: wrap;
 }
 
 .accompagnement__cta-content {
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
   flex: 1;
   min-width: 260px;
 }
@@ -219,45 +221,45 @@ const steps: readonly Step[] = [
   justify-content: center;
   width: 64px;
   height: 64px;
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: var(--radius-md);
-  color: var(--color-white);
+  background-color: alpha("surface", 0.15);
+  border-radius: $radius-md;
+  color: color("surface");
   flex-shrink: 0;
 }
 
 .accompagnement__cta-title {
-  font-size: var(--fs-xl);
-  color: var(--color-white);
-  margin-bottom: var(--space-2xs);
+  font-size: $font-size-xl;
+  color: color("surface");
+  margin-bottom: $spacing-2xs;
 }
 
 .accompagnement__cta-text {
-  color: rgba(255, 255, 255, 0.88);
+  color: alpha("surface", 0.88);
   margin: 0;
-  font-size: var(--fs-sm);
+  font-size: $font-size-sm;
 }
 
 .accompagnement__cta .btn--primary {
-  background-color: var(--color-white);
-  color: var(--color-terracotta-dark);
+  background-color: color("surface");
+  color: shade("terracotta", 16);
 }
 .accompagnement__cta .btn--primary:hover {
-  background-color: var(--color-cream);
-  color: var(--color-terracotta-dark);
+  background-color: color("cream");
+  color: shade("terracotta", 16);
 }
 
-@media (max-width: 640px) {
+@include respond-below($breakpoint-sm) {
   .accompagnement__step {
     flex-direction: column;
-    gap: var(--space-sm);
-    padding: var(--space-lg);
+    gap: $spacing-sm;
+    padding: $spacing-lg;
   }
   .accompagnement__number {
-    font-size: var(--fs-2xl);
+    font-size: $font-size-2xl;
     min-width: 0;
   }
   .accompagnement__cta {
-    padding: var(--space-lg);
+    padding: $spacing-lg;
     flex-direction: column;
     align-items: flex-start;
   }

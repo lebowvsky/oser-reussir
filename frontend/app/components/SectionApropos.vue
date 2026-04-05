@@ -66,15 +66,17 @@ const photoSrc = '/images/coach-placeholder.jpg'
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .apropos {
-  background-color: var(--color-bg);
+  background-color: color("cream");
 }
 
 .apropos__inner {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2xl);
+  gap: $spacing-2xl;
   align-items: center;
 }
 
@@ -87,15 +89,15 @@ const photoSrc = '/images/coach-placeholder.jpg'
 
 .apropos__photo-frame {
   position: relative;
-  border-radius: var(--radius-xl);
+  border-radius: $radius-xl;
   overflow: hidden;
   aspect-ratio: 4 / 5;
   background: linear-gradient(
     135deg,
-    var(--color-sand) 0%,
-    var(--color-terracotta-soft) 100%
+    color("sand") 0%,
+    tint("terracotta", 14) 100%
   );
-  box-shadow: var(--shadow-medium);
+  box-shadow: $shadow-medium;
 }
 
 .apropos__photo {
@@ -111,8 +113,8 @@ const photoSrc = '/images/coach-placeholder.jpg'
   inset: 0;
   background: linear-gradient(
     135deg,
-    var(--color-sand) 0%,
-    var(--color-terracotta-soft) 100%
+    color("sand") 0%,
+    tint("terracotta", 14) 100%
   );
   display: block;
 }
@@ -121,64 +123,64 @@ const photoSrc = '/images/coach-placeholder.jpg'
   position: absolute;
   right: -20px;
   bottom: 32px;
-  background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md) var(--space-lg);
-  box-shadow: var(--shadow-medium);
+  background-color: color("surface");
+  border-radius: $radius-lg;
+  padding: $spacing-md $spacing-lg;
+  box-shadow: $shadow-medium;
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  gap: $spacing-sm;
 }
 .apropos__badge-number {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  color: var(--color-terracotta);
+  font-family: $font-display;
+  font-size: $font-size-2xl;
+  color: color("terracotta");
   font-weight: 700;
   line-height: 1;
 }
 .apropos__badge-label {
-  font-size: var(--fs-xs);
+  font-size: $font-size-xs;
   font-weight: 600;
-  color: var(--color-text-muted);
+  color: color("muted");
   line-height: 1.3;
 }
 
 .apropos__content p {
-  margin-bottom: var(--space-md);
-  font-size: var(--fs-md);
+  margin-bottom: $spacing-md;
+  font-size: $font-size-md;
 }
 
 .apropos__content strong {
-  color: var(--color-terracotta-dark);
+  color: shade("terracotta", 16);
   font-weight: 700;
 }
 
 .apropos__highlights {
-  margin-top: var(--space-xl);
+  margin-top: $spacing-xl;
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: $spacing-sm;
 }
 .apropos__highlights li {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--fs-sm);
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: var(--color-text);
+  color: color("ink");
 }
 .apropos__dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: var(--color-sage);
+  background-color: color("primary");
   flex-shrink: 0;
 }
 
 @media (min-width: 880px) {
   .apropos__inner {
     grid-template-columns: 5fr 6fr;
-    gap: var(--space-3xl);
+    gap: $spacing-3xl;
   }
 }
 
@@ -186,10 +188,10 @@ const photoSrc = '/images/coach-placeholder.jpg'
   .apropos__badge {
     right: 12px;
     bottom: 12px;
-    padding: var(--space-sm) var(--space-md);
+    padding: $spacing-sm $spacing-md;
   }
   .apropos__badge-number {
-    font-size: var(--fs-xl);
+    font-size: $font-size-xl;
   }
 }
 </style>

@@ -1,55 +1,122 @@
 // ---------------------------------------------------------------------------
-// Palette HSL
+// Palette HSL — site vitrine Oser Réussir
 // ---------------------------------------------------------------------------
 // Chaque couleur est stockée en teinte/saturation/luminosité. Pour les
 // déclinaisons (hover, focus, surfaces…), on n'agit que sur la luminosité
 // via les fonctions `color()`, `tint()` et `shade()` (voir `_functions.scss`).
-// La couleur principale est reprise du vert du logo Oser Réussir.
+//
+// Palette chaleureuse & organique : vert sage en couleur principale,
+// terracotta en accent, neutres chauds (crème / sable).
 // ---------------------------------------------------------------------------
 
 $palette: (
-  "primary":    (h: 88,  s: 62, l: 48),   // vert du logo
-  "secondary":  (h: 200, s: 85, l: 55),   // bleu du livre du logo
-  "accent":     (h: 38,  s: 95, l: 55),   // jaune/orangé de l'étoile
-  "text":       (h: 215, s: 28, l: 17),
-  "text-muted": (h: 215, s: 16, l: 45),
-  "background": (h: 210, s: 40, l: 98),
-  "surface":    (h: 0,   s: 0,  l: 100),
-  "border":     (h: 215, s: 16, l: 88),
+  // ----- Couleur principale (vert sage du logo Oser Réussir) -----
+  "primary":    (h: 140, s: 38, l: 42),   // vert sage
+  "secondary":  (h: 200, s: 85, l: 55),   // bleu (conservé pour compat)
+  "accent":     (h: 22,  s: 55, l: 58),   // terracotta (aligné sur $palette warm)
+
+  // ----- Neutres chauds (teinte 34, beige/sable) -----
+  "cream":      (h: 34,  s: 46, l: 96),   // fond principal
+  "sand":       (h: 34,  s: 42, l: 90),
+  "sand-deep":  (h: 34,  s: 38, l: 80),
+  "border":     (h: 34,  s: 30, l: 86),   // bordure chaude
+  "muted":      (h: 34,  s: 12, l: 44),
+  "ink-soft":   (h: 34,  s: 12, l: 26),
+  "ink":        (h: 34,  s: 14, l: 15),
+
+  // ----- Couleurs texte (alignées sur les neutres chauds) -----
+  "text":       (h: 34,  s: 14, l: 15),   // = ink
+  "text-muted": (h: 34,  s: 12, l: 44),   // = muted
+
+  // ----- Surfaces & background -----
+  "background": (h: 34,  s: 46, l: 96),   // = cream
+  "surface":    (h: 0,   s: 0,  l: 100),  // blanc pur
+
+  // ----- Accent chaleureux supplémentaire -----
+  "terracotta": (h: 22,  s: 55, l: 58),
+
+  // ----- Tons chauds additionnels (gradients hero, décors) -----
+  "peach":      (h: 22,  s: 72, l: 83),   // ex #f5c9b0 : peachy clair
+  "amber-soft": (h: 34,  s: 75, l: 80),   // ex #f3d3a8 : ambre doux
+  "sage-soft":  (h: 124, s: 14, l: 59),   // ex rgb(138,163,139) : sage désaturé
+
+  // ----- Sémantique / statuts -----
   "success":    (h: 142, s: 70, l: 45),
   "warning":    (h: 38,  s: 92, l: 50),
   "danger":     (h: 0,   s: 72, l: 51),
 );
 
+// ---------------------------------------------------------------------------
 // Typographie
-$font-size-sm: 0.875rem;
+// ---------------------------------------------------------------------------
+$font-display: "Playfair Display", "Georgia", "Times New Roman", serif;
+$font-body: "Nunito", "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+// Échelle de tailles (valeurs issues du design validé dans main.css)
+$font-size-xs:   0.8125rem;
+$font-size-sm:   0.9375rem;
 $font-size-base: 1rem;
-$font-size-lg: 1.125rem;
-$font-size-xl: 1.25rem;
-$font-size-2xl: 1.5rem;
-$font-size-3xl: 1.875rem;
+$font-size-md:   1.125rem;
+$font-size-lg:   1.375rem;
+$font-size-xl:   1.75rem;
+$font-size-2xl:  2.25rem;
+$font-size-3xl:  3rem;
+$font-size-4xl:  3.75rem;
 
-// Espacement
-$spacing-xs: 0.25rem;
-$spacing-sm: 0.5rem;
-$spacing-md: 1rem;
-$spacing-lg: 1.5rem;
-$spacing-xl: 2rem;
-$spacing-2xl: 3rem;
+// Line-heights
+$line-height-tight:   1.2;
+$line-height-normal:  1.55;
+$line-height-relaxed: 1.75;
 
+// ---------------------------------------------------------------------------
+// Espacements (échelle alignée sur main.css)
+// ---------------------------------------------------------------------------
+$spacing-2xs: 0.25rem;
+$spacing-xs:  0.5rem;
+$spacing-sm:  0.75rem;
+$spacing-md:  1rem;
+$spacing-lg:  1.5rem;
+$spacing-xl:  2.5rem;
+$spacing-2xl: 4rem;
+$spacing-3xl: 6rem;
+
+// ---------------------------------------------------------------------------
 // Breakpoints
+// ---------------------------------------------------------------------------
 $breakpoint-sm: 640px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
 
+// ---------------------------------------------------------------------------
 // Layout
+// ---------------------------------------------------------------------------
 $header-height: 72px;
 $container-max-width: 1200px;
 
-// Rayons & ombres
-$radius-sm: 4px;
-$radius-md: 8px;
-$radius-lg: 16px;
-$shadow-sm: 0 1px 2px hsla(215, 28%, 17%, 0.06);
-$shadow-md: 0 4px 12px hsla(215, 28%, 17%, 0.08);
+// ---------------------------------------------------------------------------
+// Rayons
+// ---------------------------------------------------------------------------
+$radius-sm:   6px;
+$radius-md:   12px;
+$radius-lg:   20px;
+$radius-xl:   32px;
+$radius-pill: 999px;
+
+// ---------------------------------------------------------------------------
+// Ombres (valeurs HSL calculées pour rester proches de main.css)
+// ink = hsl(34, 14%, 15%)
+// ---------------------------------------------------------------------------
+$shadow-sm:     0 1px 2px hsla(34, 14%, 15%, 0.06);
+$shadow-md:     0 4px 12px hsla(34, 14%, 15%, 0.08);
+$shadow-soft:   0 4px 24px hsla(34, 14%, 15%, 0.06);
+$shadow-medium: 0 12px 40px hsla(34, 14%, 15%, 0.1);
+$shadow-ring:   0 0 0 3px hsla(140, 38%, 42%, 0.35);
+
+// ---------------------------------------------------------------------------
+// Transitions
+// ---------------------------------------------------------------------------
+$ease:            cubic-bezier(0.22, 0.61, 0.36, 1);
+$duration-fast:   160ms;
+$duration-medium: 320ms;
+$duration-slow:   520ms;

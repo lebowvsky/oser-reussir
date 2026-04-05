@@ -257,15 +257,17 @@ const handleSubmit = (event: Event): void => {
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .contact {
-  background-color: var(--color-bg);
+  background-color: color("cream");
 }
 
 .contact__inner {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2xl);
+  gap: $spacing-2xl;
   align-items: start;
 }
 
@@ -276,16 +278,16 @@ const handleSubmit = (event: Event): void => {
 .contact__info {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  margin-top: var(--space-xl);
+  gap: $spacing-sm;
+  margin-top: $spacing-xl;
 }
 
 .contact__info li {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--fs-sm);
-  color: var(--color-text-soft);
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
+  color: color("ink-soft");
   font-weight: 500;
 }
 
@@ -295,45 +297,45 @@ const handleSubmit = (event: Event): void => {
   justify-content: center;
   width: 36px;
   height: 36px;
-  background-color: rgba(201, 123, 91, 0.12);
-  color: var(--color-terracotta);
-  border-radius: var(--radius-md);
+  background-color: alpha("terracotta", 0.12);
+  color: color("terracotta");
+  border-radius: $radius-md;
   flex-shrink: 0;
 }
 
 /* Form */
 .contact__form {
-  background-color: var(--color-surface);
-  padding: var(--space-2xl);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-medium);
+  background-color: color("surface");
+  padding: $spacing-2xl;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-medium;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
+  gap: $spacing-md;
 }
 
 .contact__row {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-md);
+  gap: $spacing-md;
 }
 
 .contact__field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2xs);
+  gap: $spacing-2xs;
 }
 
 .contact__field label {
-  font-size: var(--fs-sm);
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: var(--color-text);
+  color: color("ink");
 }
 
 .contact__hint {
   font-weight: 400;
-  color: var(--color-text-muted);
-  font-size: var(--fs-xs);
+  color: color("muted");
+  font-size: $font-size-xs;
 }
 
 .contact__field input[type='text'],
@@ -343,86 +345,86 @@ const handleSubmit = (event: Event): void => {
 .contact__field textarea {
   width: 100%;
   padding: 0.75rem 1rem;
-  font-family: var(--font-body);
-  font-size: var(--fs-base);
-  color: var(--color-text);
-  background-color: var(--color-cream);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: border-color var(--dur-fast) var(--ease),
-    background-color var(--dur-fast) var(--ease),
-    box-shadow var(--dur-fast) var(--ease);
+  font-family: $font-body;
+  font-size: $font-size-base;
+  color: color("ink");
+  background-color: color("cream");
+  border: 1.5px solid color("border");
+  border-radius: $radius-md;
+  transition: border-color $duration-fast $ease,
+    background-color $duration-fast $ease,
+    box-shadow $duration-fast $ease;
 }
 
 .contact__field input:focus,
 .contact__field select:focus,
 .contact__field textarea:focus {
   outline: none;
-  border-color: var(--color-terracotta);
-  background-color: var(--color-white);
-  box-shadow: 0 0 0 4px rgba(201, 123, 91, 0.15);
+  border-color: color("terracotta");
+  background-color: color("surface");
+  box-shadow: 0 0 0 4px alpha("terracotta", 0.15);
 }
 
 .contact__field textarea {
   resize: vertical;
   min-height: 120px;
-  line-height: var(--lh-normal);
+  line-height: $line-height-normal;
 }
 
 .contact__field--checkbox {
   flex-direction: row;
   align-items: flex-start;
-  gap: var(--space-sm);
-  margin-top: var(--space-xs);
+  gap: $spacing-sm;
+  margin-top: $spacing-xs;
 }
 
 .contact__field--checkbox input[type='checkbox'] {
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  accent-color: var(--color-terracotta);
+  accent-color: color("terracotta");
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .contact__field--checkbox label {
   font-weight: 400;
-  color: var(--color-text-soft);
-  font-size: var(--fs-sm);
+  color: color("ink-soft");
+  font-size: $font-size-sm;
   cursor: pointer;
   line-height: 1.45;
 }
 
 .contact__submit {
   align-self: flex-start;
-  margin-top: var(--space-xs);
+  margin-top: $spacing-xs;
 }
 
 .contact__feedback {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-lg);
-  border-radius: var(--radius-md);
-  font-size: var(--fs-sm);
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
   font-weight: 600;
   margin: 0;
 }
 
 .contact__feedback--success {
-  background-color: rgba(138, 163, 139, 0.18);
-  color: var(--color-sage-dark);
-  border: 1px solid var(--color-sage);
+  background-color: alpha("sage-soft", 0.18);
+  color: shade("primary", 16);
+  border: 1px solid color("primary");
 }
 
 .contact__legal {
-  font-size: var(--fs-xs);
-  color: var(--color-text-muted);
+  font-size: $font-size-xs;
+  color: color("muted");
   margin: 0;
   line-height: 1.6;
 }
 
-@media (min-width: 640px) {
+@include respond-above($breakpoint-sm) {
   .contact__row {
     grid-template-columns: 1fr 1fr;
   }
@@ -431,13 +433,13 @@ const handleSubmit = (event: Event): void => {
 @media (min-width: 960px) {
   .contact__inner {
     grid-template-columns: 5fr 7fr;
-    gap: var(--space-3xl);
+    gap: $spacing-3xl;
   }
 }
 
 @media (max-width: 560px) {
   .contact__form {
-    padding: var(--space-lg);
+    padding: $spacing-lg;
   }
 }
 </style>

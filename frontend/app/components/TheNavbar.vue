@@ -127,23 +127,25 @@ onBeforeUnmount(() => {
   </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  height: var(--navbar-height);
+  height: $header-height;
   background-color: transparent;
-  transition: background-color var(--dur-med) var(--ease),
-    box-shadow var(--dur-med) var(--ease),
-    backdrop-filter var(--dur-med) var(--ease);
+  transition: background-color $duration-medium $ease,
+    box-shadow $duration-medium $ease,
+    backdrop-filter $duration-medium $ease;
 }
 
 .navbar--scrolled {
-  background-color: rgba(251, 246, 239, 0.92);
-  box-shadow: var(--shadow-soft);
+  background-color: alpha("cream", 0.92);
+  box-shadow: $shadow-soft;
   backdrop-filter: saturate(180%) blur(12px);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
 }
@@ -153,17 +155,17 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
 }
 
 .navbar__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
+  gap: $spacing-xs;
+  font-family: $font-display;
+  font-size: $font-size-lg;
   font-weight: 700;
-  color: var(--color-text);
+  color: color("ink");
 }
 .navbar__brand-logo {
   display: block;
@@ -182,16 +184,16 @@ onBeforeUnmount(() => {
 .navbar__list {
   display: flex;
   align-items: center;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
 }
 
 .navbar__link {
   position: relative;
-  font-size: var(--fs-sm);
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: var(--color-text-soft);
-  padding: var(--space-2xs) 0;
-  transition: color var(--dur-fast) var(--ease);
+  color: color("ink-soft");
+  padding: $spacing-2xs 0;
+  transition: color $duration-fast $ease;
 }
 .navbar__link::after {
   content: '';
@@ -200,12 +202,12 @@ onBeforeUnmount(() => {
   right: 100%;
   bottom: -4px;
   height: 2px;
-  background-color: var(--color-primary);
-  border-radius: var(--radius-pill);
-  transition: right var(--dur-med) var(--ease);
+  background-color: color("primary");
+  border-radius: $radius-pill;
+  transition: right $duration-medium $ease;
 }
 .navbar__link:hover {
-  color: var(--color-primary);
+  color: color("primary");
 }
 .navbar__link:hover::after {
   right: 0;
@@ -219,21 +221,21 @@ onBeforeUnmount(() => {
   align-items: center;
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-pill);
+  border-radius: $radius-pill;
   gap: 5px;
-  transition: background-color var(--dur-fast) var(--ease);
+  transition: background-color $duration-fast $ease;
 }
 .navbar__burger:hover {
-  background-color: hsl(var(--h-primary) var(--s-primary) 42% / 0.08);
+  background-color: alpha("primary", 0.08);
 }
 .navbar__burger-bar {
   display: block;
   width: 22px;
   height: 2px;
-  background-color: var(--color-text);
+  background-color: color("ink");
   border-radius: 2px;
-  transition: transform var(--dur-med) var(--ease),
-    opacity var(--dur-fast) var(--ease);
+  transition: transform $duration-medium $ease,
+    opacity $duration-fast $ease;
 }
 .navbar--open .navbar__burger-bar:nth-child(1) {
   transform: translateY(7px) rotate(45deg);
@@ -248,39 +250,39 @@ onBeforeUnmount(() => {
 /* Drawer */
 .navbar__drawer {
   position: absolute;
-  top: var(--navbar-height);
+  top: $header-height;
   left: 0;
   right: 0;
-  background-color: var(--color-cream);
-  border-top: 1px solid var(--color-border);
-  box-shadow: var(--shadow-medium);
-  padding: var(--space-lg);
+  background-color: color("cream");
+  border-top: 1px solid color("border");
+  box-shadow: $shadow-medium;
+  padding: $spacing-lg;
 }
 
 .navbar__drawer-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: $spacing-xs;
 }
 
 .navbar__drawer-link {
   display: block;
-  padding: var(--space-md);
-  font-size: var(--fs-md);
+  padding: $spacing-md;
+  font-size: $font-size-md;
   font-weight: 600;
-  color: var(--color-text);
-  border-radius: var(--radius-md);
-  transition: background-color var(--dur-fast) var(--ease),
-    color var(--dur-fast) var(--ease);
+  color: color("ink");
+  border-radius: $radius-md;
+  transition: background-color $duration-fast $ease,
+    color $duration-fast $ease;
 }
 .navbar__drawer-link:hover {
-  background-color: var(--color-sand);
-  color: var(--color-primary);
+  background-color: color("sand");
+  color: color("primary");
 }
 
 .navbar__drawer-cta {
   width: 100%;
-  margin-top: var(--space-sm);
+  margin-top: $spacing-sm;
 }
 
 /* Desktop */

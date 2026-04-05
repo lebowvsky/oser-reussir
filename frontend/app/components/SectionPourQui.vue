@@ -168,37 +168,39 @@ const profils: readonly ProfilCard[] = [
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .pourqui {
-  background-color: var(--color-surface);
+  background-color: color("surface");
 }
 
 .pourqui__header {
   max-width: 44rem;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: $spacing-2xl;
 }
 
 .pourqui__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-lg);
-  margin-bottom: var(--space-2xl);
+  gap: $spacing-lg;
+  margin-bottom: $spacing-2xl;
 }
 
 .pourqui__card {
-  background-color: var(--color-cream);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-xl);
-  transition: transform var(--dur-med) var(--ease),
-    box-shadow var(--dur-med) var(--ease),
-    border-color var(--dur-med) var(--ease);
+  background-color: color("cream");
+  border: 1px solid color("border");
+  border-radius: $radius-lg;
+  padding: $spacing-xl;
+  transition: transform $duration-medium $ease,
+    box-shadow $duration-medium $ease,
+    border-color $duration-medium $ease;
 }
 
 .pourqui__card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-medium);
-  border-color: var(--color-terracotta-soft);
+  box-shadow: $shadow-medium;
+  border-color: tint("terracotta", 14);
 }
 
 .pourqui__icon {
@@ -207,61 +209,61 @@ const profils: readonly ProfilCard[] = [
   justify-content: center;
   width: 56px;
   height: 56px;
-  border-radius: var(--radius-md);
-  background-color: rgba(201, 123, 91, 0.12);
-  color: var(--color-terracotta);
-  margin-bottom: var(--space-md);
+  border-radius: $radius-md;
+  background-color: alpha("terracotta", 0.12);
+  color: color("terracotta");
+  margin-bottom: $spacing-md;
 }
 
 .pourqui__card-title {
-  font-size: var(--fs-lg);
-  margin-bottom: var(--space-xs);
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-xs;
 }
 
 .pourqui__card-text {
-  font-size: var(--fs-sm);
-  color: var(--color-text-soft);
+  font-size: $font-size-sm;
+  color: color("ink-soft");
 }
 
 .pourqui__note {
   display: flex;
-  gap: var(--space-md);
+  gap: $spacing-md;
   align-items: flex-start;
-  padding: var(--space-lg) var(--space-xl);
+  padding: $spacing-lg $spacing-xl;
   background: linear-gradient(
     135deg,
-    var(--color-sand) 0%,
-    rgba(138, 163, 139, 0.2) 100%
+    color("sand") 0%,
+    alpha("sage-soft", 0.2) 100%
   );
-  border-left: 4px solid var(--color-sage);
-  border-radius: var(--radius-md);
+  border-left: 4px solid color("primary");
+  border-radius: $radius-md;
 }
 
 .pourqui__note-tag {
   display: inline-block;
   padding: 0.25rem 0.625rem;
-  background-color: var(--color-sage-dark);
-  color: var(--color-white);
-  font-size: var(--fs-xs);
+  background-color: shade("primary", 16);
+  color: color("surface");
+  font-size: $font-size-xs;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-radius: var(--radius-pill);
+  border-radius: $radius-pill;
   flex-shrink: 0;
 }
 
 .pourqui__note p {
-  font-size: var(--fs-md);
-  color: var(--color-text);
+  font-size: $font-size-md;
+  color: color("ink");
   margin: 0;
 }
 
 .pourqui__note strong {
-  color: var(--color-sage-dark);
+  color: shade("primary", 16);
   font-weight: 700;
 }
 
-@media (min-width: 640px) {
+@include respond-above($breakpoint-sm) {
   .pourqui__grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -276,7 +278,7 @@ const profils: readonly ProfilCard[] = [
 @media (max-width: 560px) {
   .pourqui__note {
     flex-direction: column;
-    padding: var(--space-lg);
+    padding: $spacing-lg;
   }
 }
 </style>

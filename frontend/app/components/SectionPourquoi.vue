@@ -89,13 +89,15 @@ const benefices: readonly Benefice[] = [
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .pourquoi {
   position: relative;
   background: linear-gradient(
     180deg,
-    var(--color-bg) 0%,
-    var(--color-sand) 100%
+    color("cream") 0%,
+    color("sand") 100%
   );
   overflow: hidden;
 }
@@ -110,7 +112,7 @@ const benefices: readonly Benefice[] = [
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(201, 123, 91, 0.14),
+    alpha("terracotta", 0.14),
     transparent 70%
   );
   pointer-events: none;
@@ -120,7 +122,7 @@ const benefices: readonly Benefice[] = [
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-2xl);
+  gap: $spacing-2xl;
   align-items: start;
 }
 
@@ -129,35 +131,35 @@ const benefices: readonly Benefice[] = [
 }
 
 .pourquoi__lede {
-  font-size: var(--fs-md);
-  color: var(--color-text);
-  margin-bottom: var(--space-md);
+  font-size: $font-size-md;
+  color: color("ink");
+  margin-bottom: $spacing-md;
   font-weight: 500;
 }
 
 .pourquoi__content p {
-  font-size: var(--fs-md);
-  margin-bottom: var(--space-md);
+  font-size: $font-size-md;
+  margin-bottom: $spacing-md;
 }
 
 .pourquoi__subtitle {
-  font-size: var(--fs-lg);
-  margin-top: var(--space-xl);
-  margin-bottom: var(--space-md);
+  font-size: $font-size-lg;
+  margin-top: $spacing-xl;
+  margin-bottom: $spacing-md;
 }
 
 .pourquoi__list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: $spacing-sm;
 }
 
 .pourquoi__list li {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
-  font-size: var(--fs-md);
-  color: var(--color-text);
+  gap: $spacing-sm;
+  font-size: $font-size-md;
+  color: color("ink");
   font-weight: 500;
 }
 
@@ -167,57 +169,57 @@ const benefices: readonly Benefice[] = [
   justify-content: center;
   width: 28px;
   height: 28px;
-  background-color: var(--color-sage);
-  color: var(--color-white);
+  background-color: color("primary");
+  color: color("surface");
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .pourquoi__quote {
   position: relative;
-  padding: var(--space-2xl);
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-medium);
+  padding: $spacing-2xl;
+  background-color: color("surface");
+  border-radius: $radius-xl;
+  box-shadow: $shadow-medium;
   margin: 0;
 }
 
 .pourquoi__quote-mark {
-  color: var(--color-terracotta-soft);
+  color: tint("terracotta", 14);
   opacity: 0.45;
-  margin-bottom: var(--space-md);
+  margin-bottom: $spacing-md;
 }
 
 .pourquoi__quote blockquote p {
-  font-family: var(--font-display);
-  font-size: var(--fs-xl);
+  font-family: $font-display;
+  font-size: $font-size-xl;
   line-height: 1.4;
-  color: var(--color-text);
+  color: color("ink");
   font-style: italic;
-  margin-bottom: var(--space-lg);
+  margin-bottom: $spacing-lg;
 }
 
 .pourquoi__quote-author {
-  font-size: var(--fs-sm);
+  font-size: $font-size-sm;
   font-weight: 600;
-  color: var(--color-terracotta-dark);
+  color: shade("terracotta", 16);
   letter-spacing: 0.02em;
 }
 
 @media (min-width: 960px) {
   .pourquoi__inner {
     grid-template-columns: 6fr 5fr;
-    gap: var(--space-3xl);
+    gap: $spacing-3xl;
     align-items: center;
   }
 }
 
-@media (max-width: 640px) {
+@include respond-below($breakpoint-sm) {
   .pourquoi__quote {
-    padding: var(--space-xl);
+    padding: $spacing-xl;
   }
   .pourquoi__quote blockquote p {
-    font-size: var(--fs-lg);
+    font-size: $font-size-lg;
   }
 }
 </style>

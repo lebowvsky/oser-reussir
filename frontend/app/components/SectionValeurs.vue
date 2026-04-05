@@ -131,14 +131,16 @@ const valeurs: readonly Valeur[] = [
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .valeurs {
-  background-color: var(--color-surface);
+  background-color: color("surface");
 }
 
 .valeurs__header {
   max-width: 44rem;
-  margin-bottom: var(--space-2xl);
+  margin-bottom: $spacing-2xl;
   text-align: center;
   margin-inline: auto;
 }
@@ -146,17 +148,17 @@ const valeurs: readonly Valeur[] = [
 .valeurs__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
 }
 
 .valeurs__card {
   position: relative;
-  padding: var(--space-xl);
-  background-color: var(--color-cream);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border);
-  transition: transform var(--dur-med) var(--ease),
-    box-shadow var(--dur-med) var(--ease);
+  padding: $spacing-xl;
+  background-color: color("cream");
+  border-radius: $radius-lg;
+  border: 1px solid color("border");
+  transition: transform $duration-medium $ease,
+    box-shadow $duration-medium $ease;
   overflow: hidden;
 }
 .valeurs__card::before {
@@ -168,7 +170,7 @@ const valeurs: readonly Valeur[] = [
   height: 120px;
   background: radial-gradient(
     circle at top right,
-    rgba(138, 163, 139, 0.18),
+    alpha("sage-soft", 0.18),
     transparent 70%
   );
   border-radius: 50%;
@@ -176,7 +178,7 @@ const valeurs: readonly Valeur[] = [
 }
 .valeurs__card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-medium);
+  box-shadow: $shadow-medium;
 }
 
 .valeurs__icon {
@@ -185,28 +187,28 @@ const valeurs: readonly Valeur[] = [
   justify-content: center;
   width: 56px;
   height: 56px;
-  border-radius: var(--radius-md);
-  background-color: rgba(138, 163, 139, 0.18);
-  color: var(--color-sage-dark);
-  margin-bottom: var(--space-md);
+  border-radius: $radius-md;
+  background-color: alpha("sage-soft", 0.18);
+  color: shade("primary", 16);
+  margin-bottom: $spacing-md;
 }
 
 .valeurs__card-title {
-  font-size: var(--fs-lg);
-  margin-bottom: var(--space-xs);
+  font-size: $font-size-lg;
+  margin-bottom: $spacing-xs;
 }
 
 .valeurs__card-text {
-  font-size: var(--fs-sm);
-  color: var(--color-text-soft);
+  font-size: $font-size-sm;
+  color: color("ink-soft");
 }
 
-@media (min-width: 640px) {
+@include respond-above($breakpoint-sm) {
   .valeurs__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-@media (min-width: 1024px) {
+@include respond-above($breakpoint-lg) {
   .valeurs__grid {
     grid-template-columns: repeat(4, 1fr);
   }

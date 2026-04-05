@@ -44,12 +44,14 @@ const year = new Date().getFullYear()
   </footer>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .footer {
-  background-color: var(--color-ink);
-  color: var(--color-cream);
-  padding-block: var(--space-xl);
-  margin-top: var(--space-3xl);
+  background-color: color("ink");
+  color: color("cream");
+  padding-block: $spacing-xl;
+  margin-top: $spacing-3xl;
 }
 
 .footer__inner {
@@ -57,17 +59,17 @@ const year = new Date().getFullYear()
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
 }
 
 .footer__brand {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
-  font-family: var(--font-display);
-  font-size: var(--fs-md);
+  gap: $spacing-xs;
+  font-family: $font-display;
+  font-size: $font-size-md;
   font-weight: 700;
-  color: var(--color-cream);
+  color: color("cream");
 }
 .footer__brand-logo {
   display: block;
@@ -78,26 +80,26 @@ const year = new Date().getFullYear()
 
 .footer__links {
   display: flex;
-  gap: var(--space-lg);
+  gap: $spacing-lg;
   flex-wrap: wrap;
 }
 
 .footer__links a {
-  font-size: var(--fs-sm);
-  color: rgba(251, 246, 239, 0.7);
-  transition: color var(--dur-fast) var(--ease);
+  font-size: $font-size-sm;
+  color: alpha("cream", 0.7);
+  transition: color $duration-fast $ease;
 }
 .footer__links a:hover {
-  color: var(--color-terracotta-soft);
+  color: tint("terracotta", 14);
 }
 
 .footer__copyright {
-  font-size: var(--fs-xs);
-  color: rgba(251, 246, 239, 0.55);
+  font-size: $font-size-xs;
+  color: alpha("cream", 0.55);
   margin: 0;
 }
 
-@media (max-width: 640px) {
+@include respond-below($breakpoint-sm) {
   .footer__inner {
     flex-direction: column;
     align-items: flex-start;

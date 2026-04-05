@@ -68,13 +68,15 @@
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "~/assets/styles" as *;
+
 .hero {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: var(--navbar-height);
+  padding-top: $header-height;
   overflow: hidden;
   isolation: isolate;
 }
@@ -85,9 +87,9 @@
   z-index: -1;
   background: linear-gradient(
     135deg,
-    var(--color-cream) 0%,
-    var(--color-sand) 55%,
-    #f5c9b0 100%
+    color("cream") 0%,
+    color("sand") 55%,
+    color("peach") 100%
   );
 }
 
@@ -102,14 +104,14 @@
   height: 520px;
   top: -120px;
   right: -120px;
-  background: radial-gradient(circle, var(--color-terracotta-soft), transparent 70%);
+  background: radial-gradient(circle, tint("terracotta", 14), transparent 70%);
 }
 .hero__blob--2 {
   width: 460px;
   height: 460px;
   bottom: -160px;
   left: -80px;
-  background: radial-gradient(circle, var(--color-sage), transparent 70%);
+  background: radial-gradient(circle, color("primary"), transparent 70%);
   opacity: 0.35;
 }
 .hero__blob--3 {
@@ -117,7 +119,7 @@
   height: 320px;
   top: 40%;
   left: 45%;
-  background: radial-gradient(circle, #f3d3a8, transparent 70%);
+  background: radial-gradient(circle, color("amber-soft"), transparent 70%);
   opacity: 0.4;
 }
 
@@ -127,8 +129,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--space-2xl);
-  padding-block: var(--space-2xl);
+  gap: $spacing-2xl;
+  padding-block: $spacing-2xl;
 }
 
 .hero__content {
@@ -138,59 +140,59 @@
 .hero__eyebrow {
   display: inline-block;
   padding: 0.375rem 0.875rem;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: var(--radius-pill);
-  font-size: var(--fs-xs);
+  background-color: alpha("surface", 0.7);
+  border-radius: $radius-pill;
+  font-size: $font-size-xs;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-terracotta-dark);
-  margin-bottom: var(--space-lg);
+  color: shade("terracotta", 16);
+  margin-bottom: $spacing-lg;
 }
 
 .hero__title {
-  font-size: clamp(2rem, 5.5vw, var(--fs-4xl));
+  font-size: clamp(2rem, 5.5vw, $font-size-4xl);
   line-height: 1.15;
-  color: var(--color-text);
-  margin-bottom: var(--space-lg);
+  color: color("ink");
+  margin-bottom: $spacing-lg;
 }
 
 .hero__title-accent {
-  color: var(--color-terracotta);
+  color: color("terracotta");
   font-style: italic;
 }
 
 .hero__subtitle {
-  font-size: var(--fs-md);
-  color: var(--color-text-soft);
+  font-size: $font-size-md;
+  color: color("ink-soft");
   max-width: 38rem;
-  margin-bottom: var(--space-xl);
+  margin-bottom: $spacing-xl;
 }
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-md);
+  gap: $spacing-md;
 }
 
 .hero__scroll {
   position: absolute;
-  bottom: var(--space-xl);
+  bottom: $spacing-xl;
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2xs);
-  font-size: var(--fs-xs);
+  gap: $spacing-2xs;
+  font-size: $font-size-xs;
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
-  animation: bounce 2.4s var(--ease) infinite;
+  color: color("muted");
+  animation: bounce 2.4s $ease infinite;
 }
 .hero__scroll:hover {
-  color: var(--color-terracotta);
+  color: color("terracotta");
 }
 
 @keyframes bounce {
