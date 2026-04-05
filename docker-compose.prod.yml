@@ -2,6 +2,10 @@ services:
   postgres:
     restart: unless-stopped
     ports: []
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - oser-network
 
@@ -10,8 +14,17 @@ services:
       context: ./backend
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      BACKEND_PORT: ${BACKEND_PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGINS: ${CORS_ORIGINS}
     expose:
       - "4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
     networks:
       - oser-network
       - dokploy-network
@@ -40,8 +53,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    environment:
+      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE}
     expose:
       - "80"
+    depends_on:
+      - backend
     networks:
       - oser-network
       - dokploy-network
@@ -70,8 +87,12 @@ services:
       context: ./backoffice
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL}
     expose:
       - "80"
+    depends_on:
+      - backend
     networks:
       - oser-network
       - dokploy-network
