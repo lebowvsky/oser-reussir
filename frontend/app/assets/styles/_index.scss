@@ -1,0 +1,8 @@
+// Point d'entrée unique pour les styles partagés (variables + fonctions +
+// mixins). Injecté automatiquement dans chaque feuille SCSS via
+// `additionalData` dans `nuxt.config.ts`, afin de pouvoir utiliser
+// `color()`, `shade()`, `tint()`, etc. sans import manuel.
+
+@forward "variables";
+@forward "functions";
+@forward "mixins";

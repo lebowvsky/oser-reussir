@@ -1,0 +1,20 @@
+services:
+  backend:
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run start:dev
+
+  frontend:
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.nuxt
+      - /app/.output
+    command: npm run dev
+
+  backoffice:
+    volumes:
+      - ./backoffice:/app
+      - /app/node_modules
+    command: npm run dev

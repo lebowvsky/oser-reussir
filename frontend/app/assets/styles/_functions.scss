@@ -1,0 +1,56 @@
+@use "sass:map";
+@use "sass:math";
+@use "variables" as vars;
+
+// ---------------------------------------------------------------------------
+// Gestion des couleurs en HSL
+// ---------------------------------------------------------------------------
+// Chaque couleur de la palette (`$palette` dans `_variables.scss`) est
+// stockée sous forme `(h, s, l)`. Les fonctions ci-dessous permettent de
+// récupérer une couleur en ne jouant que sur sa luminosité, garantissant
+// ainsi une cohérence visuelle parfaite pour toutes les déclinaisons.
+// ---------------------------------------------------------------------------
+
+/// Retourne une couleur de la palette sous forme `hsl(...)`.
+///
+/// @param {String} $name - clé de la couleur dans `$palette`
+/// @param {Number} $lightness [null] - luminosité 0-100, surcharge la valeur de base
+/// @param {Number} $saturation [null] - saturation 0-100, surcharge la valeur de base
+/// @param {Number} $alpha [1] - opacité 0-1
+@function color($name, $lightness: null, $saturation: null, $alpha: 1) {
+  @if not map.has-key(vars.$palette, $name) {
+    @error "Couleur `#{$name}` introuvable dans `$palette`. Clés disponibles : #{map.keys(vars.$palette)}.";
+  }
+
+  $def: map.get(vars.$palette, $name);
+  $h: map.get($def, "h");
+  $s: $saturation;
+  @if $s == null { $s: map.get($def, "s"); }
+  $l: $lightness;
+  @if $l == null { $l: map.get($def, "l"); }
+
+  $l: math.clamp(0, $l, 100);
+  $s: math.clamp(0, $s, 100);
+
+  @if $alpha == 1 {
+    @return hsl($h, $s * 1%, $l * 1%);
+  }
+  @return hsla($h, $s * 1%, $l * 1%, $alpha);
+}
+
+/// Éclaircit une couleur en ajoutant `$amount` points de luminosité.
+@function tint($name, $amount: 10) {
+  $def: map.get(vars.$palette, $name);
+  @return color($name, $lightness: map.get($def, "l") + $amount);
+}
+
+/// Assombrit une couleur en retirant `$amount` points de luminosité.
+@function shade($name, $amount: 10) {
+  $def: map.get(vars.$palette, $name);
+  @return color($name, $lightness: map.get($def, "l") - $amount);
+}
+
+/// Retourne la couleur de la palette avec l'opacité voulue.
+@function alpha($name, $alpha: 1) {
+  @return color($name, $alpha: $alpha);
+}

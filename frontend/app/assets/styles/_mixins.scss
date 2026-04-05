@@ -1,0 +1,93 @@
+@use "variables" as *;
+@use "functions" as *;
+
+// ---------------------------------------------------------------------------
+// Responsive
+// ---------------------------------------------------------------------------
+@mixin respond-above($breakpoint) {
+  @media (min-width: $breakpoint) {
+    @content;
+  }
+}
+
+@mixin respond-below($breakpoint) {
+  @media (max-width: $breakpoint - 1px) {
+    @content;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Layout
+// ---------------------------------------------------------------------------
+@mixin container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin-inline: auto;
+  padding-inline: $spacing-md;
+
+  @include respond-above($breakpoint-md) {
+    padding-inline: $spacing-lg;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ---------------------------------------------------------------------------
+// Focus accessible, basé sur la couleur primaire (on ne joue que sur la
+// luminosité et l'opacité — cohérence HSL).
+// ---------------------------------------------------------------------------
+@mixin focus-ring($name: "primary") {
+  outline: 2px solid color($name);
+  outline-offset: 2px;
+}
+
+// ---------------------------------------------------------------------------
+// Bouton générique à partir d'une couleur de la palette.
+// Toutes les déclinaisons (hover, active, disabled) sont obtenues en ne
+// modifiant que la luminosité via `shade()` / `tint()` / `color()`.
+// ---------------------------------------------------------------------------
+@mixin button($name: "primary") {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-lg;
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: color("surface");
+  background-color: color($name);
+  border: 1px solid color($name);
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+
+  &:hover:not(:disabled) {
+    background-color: shade($name, 8);
+    border-color: shade($name, 8);
+  }
+
+  &:active:not(:disabled) {
+    background-color: shade($name, 15);
+    border-color: shade($name, 15);
+  }
+
+  &:focus-visible {
+    @include focus-ring($name);
+  }
+
+  &:disabled {
+    background-color: tint($name, 25);
+    border-color: tint($name, 25);
+    cursor: not-allowed;
+  }
+}

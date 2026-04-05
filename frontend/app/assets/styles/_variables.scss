@@ -1,0 +1,55 @@
+// ---------------------------------------------------------------------------
+// Palette HSL
+// ---------------------------------------------------------------------------
+// Chaque couleur est stockée en teinte/saturation/luminosité. Pour les
+// déclinaisons (hover, focus, surfaces…), on n'agit que sur la luminosité
+// via les fonctions `color()`, `tint()` et `shade()` (voir `_functions.scss`).
+// La couleur principale est reprise du vert du logo Oser Réussir.
+// ---------------------------------------------------------------------------
+
+$palette: (
+  "primary":    (h: 88,  s: 62, l: 48),   // vert du logo
+  "secondary":  (h: 200, s: 85, l: 55),   // bleu du livre du logo
+  "accent":     (h: 38,  s: 95, l: 55),   // jaune/orangé de l'étoile
+  "text":       (h: 215, s: 28, l: 17),
+  "text-muted": (h: 215, s: 16, l: 45),
+  "background": (h: 210, s: 40, l: 98),
+  "surface":    (h: 0,   s: 0,  l: 100),
+  "border":     (h: 215, s: 16, l: 88),
+  "success":    (h: 142, s: 70, l: 45),
+  "warning":    (h: 38,  s: 92, l: 50),
+  "danger":     (h: 0,   s: 72, l: 51),
+);
+
+// Typographie
+$font-size-sm: 0.875rem;
+$font-size-base: 1rem;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
+
+// Espacement
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Layout
+$header-height: 72px;
+$container-max-width: 1200px;
+
+// Rayons & ombres
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 16px;
+$shadow-sm: 0 1px 2px hsla(215, 28%, 17%, 0.06);
+$shadow-md: 0 4px 12px hsla(215, 28%, 17%, 0.08);

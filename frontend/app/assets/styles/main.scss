@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: $font-size-base;
+  color: color("text");
+  background-color: color("background");
+}
+
+a {
+  color: color("primary");
+  text-decoration: none;
+
+  &:hover {
+    color: shade("primary", 10);
+    text-decoration: underline;
+  }
+}

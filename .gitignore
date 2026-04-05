@@ -244,3 +244,7 @@ $RECYCLE.BIN/
 // CLAUDE
 .claude
 prompts
+
+# Monorepo env files
+.env.dev
+.env.prod

@@ -1,0 +1,23 @@
+{
+  "name": "oser-reussir-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "nuxi dev --host 0.0.0.0 --port 3000",
+    "build": "nuxi build",
+    "preview": "nuxi preview",
+    "typecheck": "nuxi typecheck"
+  },
+  "dependencies": {
+    "nuxt": "^3.14.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0",
+    "pinia": "^2.3.0",
+    "@pinia/nuxt": "^0.9.0"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.83.0",
+    "typescript": "^5.6.0",
+    "vue-tsc": "^2.1.0"
+  }
+}
