@@ -2,12 +2,19 @@ services:
   postgres:
     restart: unless-stopped
     ports: []
+    networks:
+      - oser-network
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    expose:
+      - "4000"
+    networks:
+      - oser-network
+      - dokploy-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
       interval: 30s
@@ -15,16 +22,29 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api.oser-reussir.fr`)"
-      - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.backend.loadbalancer.server.port=4000"
+      - "traefik.docker.network=dokploy-network"
+      # HTTP router (redirect to HTTPS)
+      - "traefik.http.routers.backend-api.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.routers.backend-api.entrypoints=web"
+      - "traefik.http.routers.backend-api.middlewares=redirect-to-https@file"
+      # HTTPS router
+      - "traefik.http.routers.backend-api-secure.rule=Host(`${API_DOMAIN}`)"
+      - "traefik.http.routers.backend-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.backend-api-secure.tls=true"
+      - "traefik.http.routers.backend-api-secure.tls.certresolver=letsencrypt"
+      # Service configuration
+      - "traefik.http.services.backend-api.loadbalancer.server.port=4000"
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - oser-network
+      - dokploy-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
@@ -32,9 +52,17 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`oser-reussir.fr`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=dokploy-network"
+      # HTTP router (redirect to HTTPS)
+      - "traefik.http.routers.frontend.rule=Host(`${FRONTEND_DOMAIN}`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.routers.frontend.middlewares=redirect-to-https@file"
+      # HTTPS router
+      - "traefik.http.routers.frontend-secure.rule=Host(`${FRONTEND_DOMAIN}`)"
+      - "traefik.http.routers.frontend-secure.entrypoints=websecure"
+      - "traefik.http.routers.frontend-secure.tls=true"
+      - "traefik.http.routers.frontend-secure.tls.certresolver=letsencrypt"
+      # Service configuration
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
   backoffice:
@@ -42,6 +70,11 @@ services:
       context: ./backoffice
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - oser-network
+      - dokploy-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
@@ -49,7 +82,21 @@ services:
       retries: 3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backoffice.rule=Host(`admin.oser-reussir.fr`)"
-      - "traefik.http.routers.backoffice.entrypoints=websecure"
-      - "traefik.http.routers.backoffice.tls.certresolver=letsencrypt"
+      - "traefik.docker.network=dokploy-network"
+      # HTTP router (redirect to HTTPS)
+      - "traefik.http.routers.backoffice.rule=Host(`${BACKOFFICE_DOMAIN}`)"
+      - "traefik.http.routers.backoffice.entrypoints=web"
+      - "traefik.http.routers.backoffice.middlewares=redirect-to-https@file"
+      # HTTPS router
+      - "traefik.http.routers.backoffice-secure.rule=Host(`${BACKOFFICE_DOMAIN}`)"
+      - "traefik.http.routers.backoffice-secure.entrypoints=websecure"
+      - "traefik.http.routers.backoffice-secure.tls=true"
+      - "traefik.http.routers.backoffice-secure.tls.certresolver=letsencrypt"
+      # Service configuration
       - "traefik.http.services.backoffice.loadbalancer.server.port=80"
+
+networks:
+  oser-network:
+    driver: bridge
+  dokploy-network:
+    external: true
