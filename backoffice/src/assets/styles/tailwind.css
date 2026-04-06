@@ -1,6 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2563eb;
-  --color-primary-dark: #1d4ed8;
+  --color-primary: hsl(140, 38%, 42%);
+  --color-primary-dark: hsl(140, 38%, 32%);
+  --color-primary-light: hsl(140, 38%, 92%);
+  --color-accent: hsl(22, 55%, 58%);
+  --color-background: hsl(34, 46%, 96%);
+  --color-surface: hsl(0, 0%, 100%);
+  --color-border: hsl(34, 30%, 86%);
+  --color-ink: hsl(34, 14%, 15%);
+  --color-muted: hsl(34, 12%, 44%);
+  --color-sand: hsl(34, 42%, 90%);
+  --color-sidebar-bg: hsl(140, 38%, 22%);
+  --color-sidebar-text: hsl(34, 42%, 90%);
 }
