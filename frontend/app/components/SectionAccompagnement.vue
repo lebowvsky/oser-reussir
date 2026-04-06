@@ -1,35 +1,68 @@
 <script setup lang="ts">
 /**
  * Comment se déroule l'accompagnement — timeline en 3 étapes.
+ * Fetches content from the backend API with a hardcoded fallback.
  */
-interface Step {
-  readonly number: string
-  readonly titre: string
-  readonly texte: string
-  readonly highlight?: boolean
+
+interface AccompagnementData {
+  eyebrow: string
+  title: string
+  lede: string
+  step1Title: string
+  step1Text: string
+  step1Highlight: boolean
+  step2Title: string
+  step2Text: string
+  step2Highlight: boolean
+  step3Title: string
+  step3Text: string
+  step3Highlight: boolean
+  ctaTitle: string
+  ctaText: string
 }
 
-const steps: readonly Step[] = [
+const DEFAULT_ACCOMPAGNEMENT: AccompagnementData = {
+  eyebrow: 'Déroulé',
+  title: 'Comment se déroule l\'accompagnement ?',
+  lede: 'Un parcours simple, respectueux du rythme du jeune et construit avec lui, étape après étape.',
+  step1Title: 'Première séance bilan offerte',
+  step1Text: 'Un temps d\'échange gratuit pour faire connaissance, comprendre la situation du jeune, ses besoins, et poser ensemble les premières bases.',
+  step1Highlight: true,
+  step2Title: 'Accompagnement individualisé',
+  step2Text: 'Pas de forfait imposé : la durée et le rythme s\'adaptent à l\'avancement, aux objectifs et aux besoins spécifiques de chaque jeune.',
+  step2Highlight: false,
+  step3Title: 'L\'accord du jeune',
+  step3Text: 'L\'engagement du jeune est indispensable. C\'est sa démarche : il doit y adhérer pleinement pour que l\'accompagnement porte ses fruits.',
+  step3Highlight: false,
+  ctaTitle: 'Première séance offerte',
+  ctaText: 'Pour découvrir l\'accompagnement sans engagement, réservez votre séance bilan gratuite.',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: accompagnementRaw } = await useFetch<AccompagnementData>(`${baseUrl}/accompagnement`)
+const accompagnement = computed(() => accompagnementRaw.value ?? DEFAULT_ACCOMPAGNEMENT)
+
+const steps = computed(() => [
   {
     number: '01',
-    titre: 'Première séance bilan offerte',
-    texte:
-      'Un temps d\'échange gratuit pour faire connaissance, comprendre la situation du jeune, ses besoins, et poser ensemble les premières bases.',
-    highlight: true,
+    titre: accompagnement.value.step1Title,
+    texte: accompagnement.value.step1Text,
+    highlight: accompagnement.value.step1Highlight,
   },
   {
     number: '02',
-    titre: 'Accompagnement individualisé',
-    texte:
-      'Pas de forfait imposé : la durée et le rythme s\'adaptent à l\'avancement, aux objectifs et aux besoins spécifiques de chaque jeune.',
+    titre: accompagnement.value.step2Title,
+    texte: accompagnement.value.step2Text,
+    highlight: accompagnement.value.step2Highlight,
   },
   {
     number: '03',
-    titre: 'L\'accord du jeune',
-    texte:
-      'L\'engagement du jeune est indispensable. C\'est sa démarche : il doit y adhérer pleinement pour que l\'accompagnement porte ses fruits.',
+    titre: accompagnement.value.step3Title,
+    texte: accompagnement.value.step3Text,
+    highlight: accompagnement.value.step3Highlight,
   },
-] as const
+])
 </script>
 
 <template>
@@ -40,13 +73,12 @@ const steps: readonly Step[] = [
   >
     <div class="container">
       <header class="accompagnement__header" data-reveal>
-        <span class="section__eyebrow">Déroulé</span>
+        <span class="section__eyebrow">{{ accompagnement.eyebrow }}</span>
         <h2 id="accompagnement-title" class="section__title">
-          Comment se déroule l'accompagnement&nbsp;?
+          {{ accompagnement.title }}
         </h2>
         <p class="section__lede">
-          Un parcours simple, respectueux du rythme du jeune et construit avec
-          lui, étape après étape.
+          {{ accompagnement.lede }}
         </p>
       </header>
 
@@ -90,10 +122,9 @@ const steps: readonly Step[] = [
             </svg>
           </span>
           <div>
-            <h3 class="accompagnement__cta-title">Première séance offerte</h3>
+            <h3 class="accompagnement__cta-title">{{ accompagnement.ctaTitle }}</h3>
             <p class="accompagnement__cta-text">
-              Pour découvrir l'accompagnement sans engagement, réservez votre
-              séance bilan gratuite.
+              {{ accompagnement.ctaText }}
             </p>
           </div>
         </div>
