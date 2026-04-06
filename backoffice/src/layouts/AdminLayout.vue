@@ -113,6 +113,7 @@ const onLogout = (): void => {
 
   &__content {
     flex: 1;
+    margin-left: $sidebar-width;
     padding: $spacing-xl;
     background-color: $color-background;
     min-width: 0;
@@ -120,6 +121,11 @@ const onLogout = (): void => {
 }
 
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
   width: $sidebar-width;
   background-color: $color-sidebar-bg;
   padding: $spacing-lg;
