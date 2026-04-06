@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { HealthController } from './common/health/health.controller';
-import { HeroModule } from '@modules/hero/hero.module';
+import { HeroModule } from './modules/hero/hero.module';
 
 @Module({
   imports: [
