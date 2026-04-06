@@ -31,6 +31,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     apiSecret: '',
+    apiBaseServer: process.env.NUXT_API_BASE_SERVER ?? 'http://backend:4000',
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE ?? 'http://localhost:4000',
     },

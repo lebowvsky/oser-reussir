@@ -1,7 +1,33 @@
 <script setup lang="ts">
 /**
  * Hero section — organic gradient background, image-ready structure.
+ * Fetches hero content from the backend API with a hardcoded fallback.
  */
+import { parseAccentTitle } from '~/utils/parse-accent'
+
+interface HeroData {
+  eyebrow: string
+  title: string
+  subtitle: string
+  primaryButtonText: string
+  secondaryButtonText: string
+}
+
+const DEFAULT_HERO: HeroData = {
+  eyebrow: 'Coaching scolaire individuel',
+  title: 'Retrouver confiance, **dépasser les blocages** et avancer dans son parcours scolaire.',
+  subtitle:
+    "Enseignante et coach depuis plus de 20 ans, j'accompagne les jeunes avec bienveillance pour qu'ils reprennent confiance et trouvent leur propre chemin.",
+  primaryButtonText: 'Prendre rendez-vous',
+  secondaryButtonText: 'En savoir plus',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: heroRaw } = await useFetch<HeroData>(`${baseUrl}/hero`)
+
+const hero = computed(() => heroRaw.value ?? DEFAULT_HERO)
+const titleSegments = computed(() => parseAccentTitle(hero.value.title))
 </script>
 
 <template>
@@ -16,20 +42,19 @@
 
     <div class="container hero__inner">
       <div class="hero__content" data-reveal>
-        <span class="hero__eyebrow">Coaching scolaire individuel</span>
+        <span class="hero__eyebrow">{{ hero.eyebrow }}</span>
         <h1 id="hero-title" class="hero__title">
-          Retrouver confiance,
-          <span class="hero__title-accent">dépasser les blocages</span>
-          et avancer dans son parcours scolaire.
+          <template v-for="(seg, i) in titleSegments" :key="i">
+            <span v-if="seg.accent" class="hero__title-accent">{{ seg.text }}</span>
+            <template v-else>{{ seg.text }}</template>
+          </template>
         </h1>
         <p class="hero__subtitle">
-          Enseignante et coach depuis plus de 20 ans, j'accompagne les jeunes
-          avec bienveillance pour qu'ils reprennent confiance et trouvent leur
-          propre chemin.
+          {{ hero.subtitle }}
         </p>
         <div class="hero__actions">
           <a href="#contact" class="btn btn--primary">
-            Prendre rendez-vous
+            {{ hero.primaryButtonText }}
             <svg
               viewBox="0 0 20 20"
               width="16"
@@ -44,7 +69,7 @@
               <path d="M5 10h10M11 5l5 5-5 5" />
             </svg>
           </a>
-          <a href="#apropos" class="btn btn--ghost">En savoir plus</a>
+          <a href="#apropos" class="btn btn--ghost">{{ hero.secondaryButtonText }}</a>
         </div>
       </div>
 
