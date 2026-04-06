@@ -163,8 +163,8 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: $spacing-xs;
   font-family: $font-display;
-  font-size: $font-size-lg;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: color("ink");
 }
 .navbar__brand-logo {
@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
   object-fit: contain;
 }
 .navbar__brand-text {
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .navbar__nav {
