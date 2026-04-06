@@ -9,6 +9,7 @@ import { PourquiModule } from './modules/pourqui/pourqui.module';
 import { ContactModule } from './modules/contact/contact.module';
 import { AccompagnementModule } from './modules/accompagnement/accompagnement.module';
 import { ValeursModule } from './modules/valeurs/valeurs.module';
+import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ValeursModule } from './modules/valeurs/valeurs.module';
     ContactModule,
     AccompagnementModule,
     ValeursModule,
+    PourquoiModule,
   ],
   controllers: [HealthController],
 })

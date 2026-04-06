@@ -1,19 +1,47 @@
 <script setup lang="ts">
 /**
  * Pourquoi Oser Réussir — section éditoriale avec bénéfices du coaching.
+ * Fetches content from the backend API with a hardcoded fallback.
  */
-interface Benefice {
-  readonly id: string
-  readonly texte: string
+
+interface PourquoiData {
+  eyebrow: string
+  title: string
+  lede: string
+  paragraph: string
+  cardTitle: string
+  benefice1: string
+  benefice2: string
+  benefice3: string
+  benefice4: string
+  benefice5: string
 }
 
-const benefices: readonly Benefice[] = [
-  { id: 'confiance', texte: 'Reprendre confiance en soi' },
-  { id: 'motivation', texte: 'Retrouver la motivation' },
-  { id: 'organisation', texte: 'Mieux s\'organiser au quotidien' },
-  { id: 'methodes', texte: 'Identifier des méthodes adaptées' },
-  { id: 'croyances', texte: 'Dépasser les croyances limitantes' },
-] as const
+const DEFAULT_POURQUOI: PourquoiData = {
+  eyebrow: 'Pourquoi Oser Réussir ?',
+  title: 'Parce que chaque jeune possède des ressources souvent insoupçonnées.',
+  lede: 'Parfois, il suffit d\'un espace d\'écoute, d\'un accompagnement bienveillant et de quelques clés pour reprendre confiance et oser avancer.',
+  paragraph: 'Le coaching scolaire propose une approche différente du soutien scolaire : il ne s\'agit pas de refaire les cours, mais d\'aider le jeune à mieux se connaître, à comprendre ce qui bloque et à retrouver une dynamique positive.',
+  cardTitle: 'Ce que le coaching apporte',
+  benefice1: 'Reprendre confiance en soi',
+  benefice2: 'Retrouver la motivation',
+  benefice3: 'Mieux s\'organiser au quotidien',
+  benefice4: 'Identifier des méthodes adaptées',
+  benefice5: 'Dépasser les croyances limitantes',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: pourquoiRaw } = await useFetch<PourquoiData>(`${baseUrl}/pourquoi`)
+const pourquoiData = computed(() => pourquoiRaw.value ?? DEFAULT_POURQUOI)
+
+const benefices = computed(() => [
+  { id: 'confiance', texte: pourquoiData.value.benefice1 },
+  { id: 'motivation', texte: pourquoiData.value.benefice2 },
+  { id: 'organisation', texte: pourquoiData.value.benefice3 },
+  { id: 'methodes', texte: pourquoiData.value.benefice4 },
+  { id: 'croyances', texte: pourquoiData.value.benefice5 },
+])
 </script>
 
 <template>
@@ -24,25 +52,18 @@ const benefices: readonly Benefice[] = [
   >
     <div class="container pourquoi__inner">
       <div class="pourquoi__content" data-reveal>
-        <span class="section__eyebrow">Pourquoi Oser Réussir&nbsp;?</span>
+        <span class="section__eyebrow">{{ pourquoiData.eyebrow }}</span>
         <h2 id="pourquoi-title" class="section__title">
-          Parce que chaque jeune possède des ressources souvent insoupçonnées.
+          {{ pourquoiData.title }}
         </h2>
         <p class="pourquoi__lede">
-          Parfois, il suffit d'un espace d'écoute, d'un accompagnement
-          bienveillant et de quelques clés pour reprendre confiance et oser
-          avancer.
+          {{ pourquoiData.lede }}
         </p>
-        <p>
-          Le coaching scolaire propose une approche différente du soutien
-          scolaire&nbsp;: il ne s'agit pas de refaire les cours, mais
-          d'aider le jeune à mieux se connaître, à comprendre ce qui bloque
-          et à retrouver une dynamique positive.
-        </p>
+        <p>{{ pourquoiData.paragraph }}</p>
       </div>
 
       <div class="pourquoi__card" data-reveal>
-        <h3 class="pourquoi__card-title">Ce que le coaching apporte</h3>
+        <h3 class="pourquoi__card-title">{{ pourquoiData.cardTitle }}</h3>
         <ul class="pourquoi__list">
           <li v-for="benefice in benefices" :key="benefice.id">
             <span class="pourquoi__check" aria-hidden="true">
