@@ -1,7 +1,40 @@
 <script setup lang="ts">
 /**
  * À propos — bio de la coach, mise en page 2 colonnes desktop / 1 col mobile.
+ * Fetches content from the backend API with a hardcoded fallback.
  */
+
+interface AproposData {
+  eyebrow: string
+  title: string
+  paragraph1: string
+  paragraph2: string
+  paragraph3: string
+  badgeNumber: string
+  badgeLabel: string
+  highlight1: string
+  highlight2: string
+  highlight3: string
+}
+
+const DEFAULT_APROPOS: AproposData = {
+  eyebrow: 'À propos',
+  title: 'Accompagner autrement, au plus près de chaque jeune.',
+  paragraph1: "Enseignante d'anglais depuis plus de vingt ans en lycée professionnel, j'ai accompagné des élèves aux profils très divers, avec leurs forces, leurs doutes et leurs histoires.",
+  paragraph2: "Au fil des années, j'ai ressenti l'envie d'aller plus loin que le cadre de la classe — d'offrir un espace dédié, centré sur le jeune, où écouter, comprendre et accompagner deviennent un vrai métier. C'est ainsi qu'est né <strong>Oser Réussir</strong>.",
+  paragraph3: "Mon objectif\u00a0: aider chaque jeune à reprendre confiance, à mieux comprendre son fonctionnement, à dépasser ses blocages et à trouver des stratégies d'apprentissage qui lui correspondent vraiment.",
+  badgeNumber: '20+',
+  badgeLabel: "années\nd'expérience",
+  highlight1: 'Enseignante en lycée professionnel',
+  highlight2: 'Formée au coaching scolaire',
+  highlight3: 'Approche bienveillante et individualisée',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: aproposRaw } = await useFetch<AproposData>(`${baseUrl}/apropos`)
+const apropos = computed(() => aproposRaw.value ?? DEFAULT_APROPOS)
+
 const photoSrc = '/images/coach-placeholder.jpg'
 </script>
 
@@ -19,46 +52,33 @@ const photoSrc = '/images/coach-placeholder.jpg'
             height="620"
           />
           <div class="apropos__badge" aria-hidden="true">
-            <span class="apropos__badge-number">20+</span>
-            <span class="apropos__badge-label">années<br />d'expérience</span>
+            <span class="apropos__badge-number">{{ apropos.badgeNumber }}</span>
+            <span class="apropos__badge-label" v-html="apropos.badgeLabel.replace('\n', '<br>')"></span>
           </div>
         </div>
       </div>
 
       <div class="apropos__content" data-reveal>
-        <span class="section__eyebrow">À propos</span>
+        <span class="section__eyebrow">{{ apropos.eyebrow }}</span>
         <h2 id="apropos-title" class="section__title">
-          Accompagner autrement, au plus près de chaque jeune.
+          {{ apropos.title }}
         </h2>
-        <p>
-          Enseignante d'anglais depuis plus de vingt ans en lycée professionnel,
-          j'ai accompagné des élèves aux profils très divers, avec leurs forces,
-          leurs doutes et leurs histoires.
-        </p>
-        <p>
-          Au fil des années, j'ai ressenti l'envie d'aller plus loin que le cadre
-          de la classe — d'offrir un espace dédié, centré sur le jeune, où
-          écouter, comprendre et accompagner deviennent un vrai métier. C'est
-          ainsi qu'est né <strong>Oser Réussir</strong>.
-        </p>
-        <p>
-          Mon objectif&nbsp;: aider chaque jeune à reprendre confiance, à mieux
-          comprendre son fonctionnement, à dépasser ses blocages et à trouver
-          des stratégies d'apprentissage qui lui correspondent vraiment.
-        </p>
+        <p>{{ apropos.paragraph1 }}</p>
+        <p v-html="apropos.paragraph2"></p>
+        <p>{{ apropos.paragraph3 }}</p>
 
         <ul class="apropos__highlights">
           <li>
             <span class="apropos__dot" aria-hidden="true"></span>
-            Enseignante en lycée professionnel
+            {{ apropos.highlight1 }}
           </li>
           <li>
             <span class="apropos__dot" aria-hidden="true"></span>
-            Formée au coaching scolaire
+            {{ apropos.highlight2 }}
           </li>
           <li>
             <span class="apropos__dot" aria-hidden="true"></span>
-            Approche bienveillante et individualisée
+            {{ apropos.highlight3 }}
           </li>
         </ul>
       </div>
