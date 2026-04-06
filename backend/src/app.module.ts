@@ -6,6 +6,7 @@ import { HealthController } from './common/health/health.controller';
 import { HeroModule } from './modules/hero/hero.module';
 import { AproposModule } from './modules/apropos/apropos.module';
 import { PourquiModule } from './modules/pourqui/pourqui.module';
+import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { PourquiModule } from './modules/pourqui/pourqui.module';
     HeroModule,
     AproposModule,
     PourquiModule,
+    ContactModule,
   ],
   controllers: [HealthController],
 })

@@ -1,50 +1,24 @@
 <script setup lang="ts">
 /**
- * @pattern Mediator + State
- * @purpose Form state management with native HTML5 validation, no real submission.
+ * Contact section — displays admin phone and email fetched from the backend API.
+ * No form; just prominent, clickable contact information.
+ *
+ * @pattern Adapter
+ * @category Structural
+ * @purpose Fetches raw contact data from the API and adapts it for display with fallback defaults.
  */
-type Role = '' | 'parent' | 'jeune' | 'autre'
 
-interface ContactForm {
-  prenom: string
-  nom: string
+interface ContactData {
+  phone: string
   email: string
-  telephone: string
-  message: string
-  role: Role
-  consent: boolean
 }
 
-type SubmitState = 'idle' | 'success' | 'error'
+const DEFAULT_CONTACT: ContactData = { phone: '', email: '' }
 
-const createEmptyForm = (): ContactForm => ({
-  prenom: '',
-  nom: '',
-  email: '',
-  telephone: '',
-  message: '',
-  role: '',
-  consent: false,
-})
-
-const form = ref<ContactForm>(createEmptyForm())
-const submitState = ref<SubmitState>('idle')
-
-const handleSubmit = (event: Event): void => {
-  event.preventDefault()
-
-  // No real submission — log for now, will be wired to backend later.
-  // eslint-disable-next-line no-console
-  console.log('[Oser Réussir] Contact form submitted:', { ...form.value })
-
-  submitState.value = 'success'
-  form.value = createEmptyForm()
-
-  // Reset inline message after 6s
-  window.setTimeout(() => {
-    submitState.value = 'idle'
-  }, 6000)
-}
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: contactRaw } = await useFetch<ContactData>(`${baseUrl}/contact`)
+const contact = computed(() => contactRaw.value ?? DEFAULT_CONTACT)
 </script>
 
 <template>
@@ -53,10 +27,10 @@ const handleSubmit = (event: Event): void => {
       <div class="contact__intro" data-reveal>
         <span class="section__eyebrow">Contact</span>
         <h2 id="contact-title" class="section__title">
-          Prendre rendez-vous pour la séance bilan offerte.
+          Prendre rendez-vous pour la s&#233;ance bilan offerte.
         </h2>
         <p class="section__lede">
-          Un message, une question, une prise de contact&nbsp;? Je vous réponds
+          Un message, une question, une prise de contact&nbsp;? Je vous r&#233;ponds
           personnellement sous quelques jours.
         </p>
 
@@ -77,7 +51,7 @@ const handleSubmit = (event: Event): void => {
                 <path d="m3 7 9 6 9-6" />
               </svg>
             </span>
-            <span>Réponse sous 48h en semaine</span>
+            <span>R&#233;ponse sous 48h en semaine</span>
           </li>
           <li>
             <span class="contact__info-icon" aria-hidden="true">
@@ -95,7 +69,7 @@ const handleSubmit = (event: Event): void => {
                 <path d="M12 6v6l4 2" />
               </svg>
             </span>
-            <span>Séances en présentiel ou en visio</span>
+            <span>S&#233;ances en pr&#233;sentiel ou en visio</span>
           </li>
           <li>
             <span class="contact__info-icon" aria-hidden="true">
@@ -113,146 +87,79 @@ const handleSubmit = (event: Event): void => {
                 <circle cx="12" cy="12" r="3" />
               </svg>
             </span>
-            <span>Échanges confidentiels et bienveillants</span>
+            <span>&#201;changes confidentiels et bienveillants</span>
           </li>
         </ul>
       </div>
 
-      <form
-        class="contact__form"
-        novalidate="false"
-        data-reveal
-        @submit="handleSubmit"
-      >
-        <div class="contact__row">
-          <div class="contact__field">
-            <label for="prenom">Prénom <span aria-hidden="true">*</span></label>
-            <input
-              id="prenom"
-              v-model="form.prenom"
-              type="text"
-              name="prenom"
-              autocomplete="given-name"
-              required
-            />
-          </div>
-          <div class="contact__field">
-            <label for="nom">Nom <span aria-hidden="true">*</span></label>
-            <input
-              id="nom"
-              v-model="form.nom"
-              type="text"
-              name="nom"
-              autocomplete="family-name"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="contact__row">
-          <div class="contact__field">
-            <label for="email">Email <span aria-hidden="true">*</span></label>
-            <input
-              id="email"
-              v-model="form.email"
-              type="email"
-              name="email"
-              autocomplete="email"
-              required
-            />
-          </div>
-          <div class="contact__field">
-            <label for="telephone">Téléphone <span class="contact__hint">(optionnel)</span></label>
-            <input
-              id="telephone"
-              v-model="form.telephone"
-              type="tel"
-              name="telephone"
-              autocomplete="tel"
-            />
-          </div>
-        </div>
-
-        <div class="contact__field">
-          <label for="role">Vous êtes <span aria-hidden="true">*</span></label>
-          <select id="role" v-model="form.role" name="role" required>
-            <option value="" disabled>— Choisissez une option —</option>
-            <option value="parent">Un parent</option>
-            <option value="jeune">Le jeune concerné</option>
-            <option value="autre">Autre (enseignant, proche...)</option>
-          </select>
-        </div>
-
-        <div class="contact__field">
-          <label for="message">Message <span aria-hidden="true">*</span></label>
-          <textarea
-            id="message"
-            v-model="form.message"
-            name="message"
-            rows="5"
-            required
-            placeholder="Présentez brièvement votre situation ou votre demande…"
-          ></textarea>
-        </div>
-
-        <div class="contact__field contact__field--checkbox">
-          <input
-            id="consent"
-            v-model="form.consent"
-            type="checkbox"
-            name="consent"
-            required
-          />
-          <label for="consent">
-            J'accepte d'être recontacté(e) concernant cette demande.
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn--primary contact__submit">
-          Envoyer le message
-          <svg
-            viewBox="0 0 20 20"
-            width="16"
-            height="16"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 10h10M11 5l5 5-5 5" />
-          </svg>
-        </button>
-
-        <p
-          v-if="submitState === 'success'"
-          class="contact__feedback contact__feedback--success"
-          role="status"
-          aria-live="polite"
-        >
-          <svg
-            viewBox="0 0 20 20"
-            width="18"
-            height="18"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M4 10l4 4 8-8" />
-          </svg>
-          Merci&nbsp;! Votre message a bien été pris en compte. Je reviens vers
-          vous rapidement.
+      <div class="contact__card" data-reveal>
+        <h3 class="contact__card-title">Me contacter directement</h3>
+        <p class="contact__card-subtitle">
+          N'h&#233;sitez pas &#224; me joindre par t&#233;l&#233;phone ou par email pour
+          &#233;changer sur votre situation.
         </p>
 
-        <p class="contact__legal">
-          Les informations recueillies sont utilisées uniquement dans le cadre
-          de votre demande. Aucun partage à des tiers.
-        </p>
-      </form>
+        <div class="contact__methods">
+          <a
+            v-if="contact.phone"
+            :href="`tel:${contact.phone}`"
+            class="contact__method"
+            aria-label="Appeler au {{ contact.phone }}"
+          >
+            <span class="contact__method-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07
+                     19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18
+                     2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2
+                     2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1
+                     2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+            </span>
+            <span class="contact__method-details">
+              <span class="contact__method-label">T&#233;l&#233;phone</span>
+              <span class="contact__method-value">{{ contact.phone }}</span>
+            </span>
+          </a>
+
+          <a
+            v-if="contact.email"
+            :href="`mailto:${contact.email}`"
+            class="contact__method"
+            aria-label="Envoyer un email &#224; {{ contact.email }}"
+          >
+            <span class="contact__method-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+            </span>
+            <span class="contact__method-details">
+              <span class="contact__method-label">Email</span>
+              <span class="contact__method-value">{{ contact.email }}</span>
+            </span>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -303,131 +210,91 @@ const handleSubmit = (event: Event): void => {
   flex-shrink: 0;
 }
 
-/* Form */
-.contact__form {
+/* Contact card */
+.contact__card {
   background-color: color("surface");
   padding: $spacing-2xl;
   border-radius: $radius-xl;
   box-shadow: $shadow-medium;
   display: flex;
   flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.contact__card-title {
+  font-family: $font-display;
+  font-size: $font-size-xl;
+  color: color("ink");
+  margin: 0;
+}
+
+.contact__card-subtitle {
+  font-size: $font-size-md;
+  color: color("ink-soft");
+  margin: 0;
+  line-height: $line-height-normal;
+}
+
+/* Contact methods */
+.contact__methods {
+  display: flex;
+  flex-direction: column;
   gap: $spacing-md;
 }
 
-.contact__row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $spacing-md;
+.contact__method {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  background-color: color("cream");
+  border: 1.5px solid color("border");
+  text-decoration: none;
+  color: inherit;
+  transition: border-color $duration-fast $ease,
+    box-shadow $duration-fast $ease,
+    background-color $duration-fast $ease;
 }
 
-.contact__field {
+.contact__method:hover,
+.contact__method:focus-visible {
+  border-color: color("terracotta");
+  box-shadow: 0 0 0 4px alpha("terracotta", 0.12);
+  background-color: color("surface");
+  outline: none;
+}
+
+.contact__method-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background-color: alpha("terracotta", 0.12);
+  color: color("terracotta");
+  border-radius: $radius-md;
+  flex-shrink: 0;
+}
+
+.contact__method-details {
   display: flex;
   flex-direction: column;
   gap: $spacing-2xs;
 }
 
-.contact__field label {
+.contact__method-label {
   font-size: $font-size-sm;
   font-weight: 600;
-  color: color("ink");
-}
-
-.contact__hint {
-  font-weight: 400;
   color: color("muted");
-  font-size: $font-size-xs;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.contact__field input[type='text'],
-.contact__field input[type='email'],
-.contact__field input[type='tel'],
-.contact__field select,
-.contact__field textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-family: $font-body;
-  font-size: $font-size-base;
+.contact__method-value {
+  font-size: $font-size-lg;
+  font-weight: 700;
   color: color("ink");
-  background-color: color("cream");
-  border: 1.5px solid color("border");
-  border-radius: $radius-md;
-  transition: border-color $duration-fast $ease,
-    background-color $duration-fast $ease,
-    box-shadow $duration-fast $ease;
-}
-
-.contact__field input:focus,
-.contact__field select:focus,
-.contact__field textarea:focus {
-  outline: none;
-  border-color: color("terracotta");
-  background-color: color("surface");
-  box-shadow: 0 0 0 4px alpha("terracotta", 0.15);
-}
-
-.contact__field textarea {
-  resize: vertical;
-  min-height: 120px;
-  line-height: $line-height-normal;
-}
-
-.contact__field--checkbox {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: $spacing-sm;
-  margin-top: $spacing-xs;
-}
-
-.contact__field--checkbox input[type='checkbox'] {
-  width: 18px;
-  height: 18px;
-  margin-top: 2px;
-  accent-color: color("terracotta");
-  cursor: pointer;
-  flex-shrink: 0;
-}
-
-.contact__field--checkbox label {
-  font-weight: 400;
-  color: color("ink-soft");
-  font-size: $font-size-sm;
-  cursor: pointer;
-  line-height: 1.45;
-}
-
-.contact__submit {
-  align-self: flex-start;
-  margin-top: $spacing-xs;
-}
-
-.contact__feedback {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  padding: $spacing-md $spacing-lg;
-  border-radius: $radius-md;
-  font-size: $font-size-sm;
-  font-weight: 600;
-  margin: 0;
-}
-
-.contact__feedback--success {
-  background-color: alpha("sage-soft", 0.18);
-  color: shade("primary", 16);
-  border: 1px solid color("primary");
-}
-
-.contact__legal {
-  font-size: $font-size-xs;
-  color: color("muted");
-  margin: 0;
-  line-height: 1.6;
-}
-
-@include respond-above($breakpoint-sm) {
-  .contact__row {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 
 @media (min-width: 960px) {
@@ -438,8 +305,22 @@ const handleSubmit = (event: Event): void => {
 }
 
 @media (max-width: 560px) {
-  .contact__form {
+  .contact__card {
     padding: $spacing-lg;
+  }
+
+  .contact__method {
+    gap: $spacing-md;
+    padding: $spacing-md;
+  }
+
+  .contact__method-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .contact__method-value {
+    font-size: $font-size-md;
   }
 }
 </style>
