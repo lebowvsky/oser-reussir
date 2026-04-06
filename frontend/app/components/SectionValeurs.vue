@@ -1,53 +1,63 @@
 <script setup lang="ts">
 /**
  * Valeurs — 4 blocs : Écoute, Confiance, Autonomie, Connaissance du système.
+ * Fetches content from the backend API with a hardcoded fallback.
  */
-interface Valeur {
-  readonly id: string
-  readonly titre: string
-  readonly texte: string
-  readonly icon: 'ear' | 'shield' | 'wings' | 'book'
+
+interface ValeursData {
+  eyebrow: string
+  title: string
+  card1Title: string
+  card1Text: string
+  card1Icon: string
+  card2Title: string
+  card2Text: string
+  card2Icon: string
+  card3Title: string
+  card3Text: string
+  card3Icon: string
+  card4Title: string
+  card4Text: string
+  card4Icon: string
 }
 
-const valeurs: readonly Valeur[] = [
-  {
-    id: 'ecoute',
-    titre: 'Écoute',
-    texte:
-      'Chaque jeune est accueilli avec son histoire, son rythme, ses émotions et ses propres mots.',
-    icon: 'ear',
-  },
-  {
-    id: 'confiance',
-    titre: 'Confiance',
-    texte:
-      'Retrouver confiance en ses capacités, en son jugement et en sa propre façon d\'apprendre.',
-    icon: 'shield',
-  },
-  {
-    id: 'autonomie',
-    titre: 'Autonomie',
-    texte:
-      'Transmettre des outils durables, des repères et des méthodes que le jeune pourra mobiliser seul.',
-    icon: 'wings',
-  },
-  {
-    id: 'systeme',
-    titre: 'Connaissance du système scolaire',
-    texte:
-      'Plus de vingt ans d\'expérience d\'enseignante pour comprendre les réalités concrètes du parcours.',
-    icon: 'book',
-  },
-] as const
+const DEFAULT_VALEURS: ValeursData = {
+  eyebrow: 'Valeurs',
+  title: 'Quatre valeurs au cœur de chaque accompagnement.',
+  card1Title: 'Écoute',
+  card1Text: 'Chaque jeune est accueilli avec son histoire, son rythme, ses émotions et ses propres mots.',
+  card1Icon: 'ear',
+  card2Title: 'Confiance',
+  card2Text: 'Retrouver confiance en ses capacités, en son jugement et en sa propre façon d\'apprendre.',
+  card2Icon: 'shield',
+  card3Title: 'Autonomie',
+  card3Text: 'Transmettre des outils durables, des repères et des méthodes que le jeune pourra mobiliser seul.',
+  card3Icon: 'wings',
+  card4Title: 'Connaissance du système scolaire',
+  card4Text: 'Plus de vingt ans d\'expérience d\'enseignante pour comprendre les réalités concrètes du parcours.',
+  card4Icon: 'book',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: valeursRaw } = await useFetch<ValeursData>(`${baseUrl}/valeurs`)
+const valeursData = computed(() => valeursRaw.value ?? DEFAULT_VALEURS)
+
+const valeurs = computed(() => [
+  { id: 'ecoute', titre: valeursData.value.card1Title, texte: valeursData.value.card1Text, icon: valeursData.value.card1Icon },
+  { id: 'confiance', titre: valeursData.value.card2Title, texte: valeursData.value.card2Text, icon: valeursData.value.card2Icon },
+  { id: 'autonomie', titre: valeursData.value.card3Title, texte: valeursData.value.card3Text, icon: valeursData.value.card3Icon },
+  { id: 'systeme', titre: valeursData.value.card4Title, texte: valeursData.value.card4Text, icon: valeursData.value.card4Icon },
+])
 </script>
 
 <template>
   <section id="valeurs" class="valeurs section" aria-labelledby="valeurs-title">
     <div class="container">
       <header class="valeurs__header" data-reveal>
-        <span class="section__eyebrow">Valeurs</span>
+        <span class="section__eyebrow">{{ valeursData.eyebrow }}</span>
         <h2 id="valeurs-title" class="section__title">
-          Quatre valeurs au cœur de chaque accompagnement.
+          {{ valeursData.title }}
         </h2>
       </header>
 
