@@ -5,6 +5,7 @@ import * as Joi from 'joi';
 import { HealthController } from './common/health/health.controller';
 import { HeroModule } from './modules/hero/hero.module';
 import { AproposModule } from './modules/apropos/apropos.module';
+import { PourquiModule } from './modules/pourqui/pourqui.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AproposModule } from './modules/apropos/apropos.module';
 
     HeroModule,
     AproposModule,
+    PourquiModule,
   ],
   controllers: [HealthController],
 })

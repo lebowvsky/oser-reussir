@@ -1,65 +1,79 @@
 <script setup lang="ts">
 /**
  * Pour qui ? — cards with inline SVG icons for target profiles.
+ * Fetches content from the backend API with a hardcoded fallback.
  */
-interface ProfilCard {
-  readonly id: string
-  readonly titre: string
-  readonly texte: string
-  readonly icon: 'heart' | 'spark' | 'grid' | 'question' | 'compass'
+
+interface PourquiData {
+  eyebrow: string
+  title: string
+  lede: string
+  card1Title: string
+  card1Text: string
+  card1Icon: string
+  card2Title: string
+  card2Text: string
+  card2Icon: string
+  card3Title: string
+  card3Text: string
+  card3Icon: string
+  card4Title: string
+  card4Text: string
+  card4Icon: string
+  card5Title: string
+  card5Text: string
+  card5Icon: string
+  noteTag: string
+  noteMessage: string
 }
 
-const profils: readonly ProfilCard[] = [
-  {
-    id: 'confiance',
-    titre: 'Manque de confiance',
-    texte:
-      'Quand la peur de se tromper ou le regard des autres prend le dessus sur l\'envie d\'avancer.',
-    icon: 'heart',
-  },
-  {
-    id: 'demotivation',
-    titre: 'Démotivation',
-    texte:
-      'Quand l\'école a perdu son sens et que la motivation s\'est éteinte au fil du temps.',
-    icon: 'spark',
-  },
-  {
-    id: 'organisation',
-    titre: 'Difficultés d\'organisation',
-    texte:
-      'Quand gérer son travail, ses révisions et son temps devient une source de stress.',
-    icon: 'grid',
-  },
-  {
-    id: 'doute',
-    titre: 'Doute sur ses capacités',
-    texte:
-      'Quand le jeune se compare, se dévalorise et n\'ose plus croire en ses propres ressources.',
-    icon: 'question',
-  },
-  {
-    id: 'sens',
-    titre: 'Perte de sens',
-    texte:
-      'Quand l\'orientation ou les apprentissages semblent flous, et que l\'on ne sait plus où aller.',
-    icon: 'compass',
-  },
-] as const
+const DEFAULT_POURQUI: PourquiData = {
+  eyebrow: 'Pour qui ?',
+  title: 'Un accompagnement pour les coll\u00e9giens, lyc\u00e9ens et \u00e9tudiants.',
+  lede: 'Le coaching scolaire s\u2019adresse aux jeunes qui traversent un moment plus difficile, et qui ont besoin d\u2019un espace d\u00e9di\u00e9 pour retrouver leur \u00e9lan.',
+  card1Title: 'Manque de confiance',
+  card1Text: 'Quand la peur de se tromper ou le regard des autres prend le dessus sur l\u2019envie d\u2019avancer.',
+  card1Icon: 'heart',
+  card2Title: 'D\u00e9motivation',
+  card2Text: 'Quand l\u2019\u00e9cole a perdu son sens et que la motivation s\u2019est \u00e9teinte au fil du temps.',
+  card2Icon: 'spark',
+  card3Title: 'Difficult\u00e9s d\u2019organisation',
+  card3Text: 'Quand g\u00e9rer son travail, ses r\u00e9visions et son temps devient une source de stress.',
+  card3Icon: 'grid',
+  card4Title: 'Doute sur ses capacit\u00e9s',
+  card4Text: 'Quand le jeune se compare, se d\u00e9valorise et n\u2019ose plus croire en ses propres ressources.',
+  card4Icon: 'question',
+  card5Title: 'Perte de sens',
+  card5Text: 'Quand l\u2019orientation ou les apprentissages semblent flous, et que l\u2019on ne sait plus o\u00f9 aller.',
+  card5Icon: 'compass',
+  noteTag: 'Important',
+  noteMessage: '<strong>Le coaching n\u2019est pas du soutien scolaire.</strong> Il ne remplace pas les cours particuliers ni l\u2019aide aux devoirs\u00a0: il aide le jeune \u00e0 mieux se conna\u00eetre, \u00e0 identifier ce qui bloque et \u00e0 retrouver sa propre dynamique d\u2019apprentissage.',
+}
+
+const config = useRuntimeConfig()
+const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
+const { data: pourquiRaw } = await useFetch<PourquiData>(`${baseUrl}/pourqui`)
+const pourqui = computed(() => pourquiRaw.value ?? DEFAULT_POURQUI)
+
+const profils = computed(() => [
+  { id: 'card1', titre: pourqui.value.card1Title, texte: pourqui.value.card1Text, icon: pourqui.value.card1Icon },
+  { id: 'card2', titre: pourqui.value.card2Title, texte: pourqui.value.card2Text, icon: pourqui.value.card2Icon },
+  { id: 'card3', titre: pourqui.value.card3Title, texte: pourqui.value.card3Text, icon: pourqui.value.card3Icon },
+  { id: 'card4', titre: pourqui.value.card4Title, texte: pourqui.value.card4Text, icon: pourqui.value.card4Icon },
+  { id: 'card5', titre: pourqui.value.card5Title, texte: pourqui.value.card5Text, icon: pourqui.value.card5Icon },
+])
 </script>
 
 <template>
   <section id="pourqui" class="pourqui section" aria-labelledby="pourqui-title">
     <div class="container">
       <header class="pourqui__header" data-reveal>
-        <span class="section__eyebrow">Pour qui ?</span>
+        <span class="section__eyebrow">{{ pourqui.eyebrow }}</span>
         <h2 id="pourqui-title" class="section__title">
-          Un accompagnement pour les collégiens, lycéens et étudiants.
+          {{ pourqui.title }}
         </h2>
         <p class="section__lede">
-          Le coaching scolaire s'adresse aux jeunes qui traversent un moment
-          plus difficile, et qui ont besoin d'un espace dédié pour retrouver
-          leur élan.
+          {{ pourqui.lede }}
         </p>
       </header>
 
@@ -156,13 +170,8 @@ const profils: readonly ProfilCard[] = [
       </ul>
 
       <aside class="pourqui__note" data-reveal>
-        <span class="pourqui__note-tag" aria-hidden="true">Important</span>
-        <p>
-          <strong>Le coaching n'est pas du soutien scolaire.</strong>
-          Il ne remplace pas les cours particuliers ni l'aide aux devoirs&nbsp;:
-          il aide le jeune à mieux se connaître, à identifier ce qui bloque et à
-          retrouver sa propre dynamique d'apprentissage.
-        </p>
+        <span class="pourqui__note-tag" aria-hidden="true">{{ pourqui.noteTag }}</span>
+        <p v-html="pourqui.noteMessage"></p>
       </aside>
     </div>
   </section>
