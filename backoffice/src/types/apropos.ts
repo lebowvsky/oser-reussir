@@ -10,4 +10,5 @@ export interface AproposContent {
   highlight1: string
   highlight2: string
   highlight3: string
+  imageUrl: string | null
 }

@@ -248,3 +248,9 @@ prompts
 # Monorepo env files
 .env.dev
 .env.prod
+
+# Uploaded files (keep directory structure via .gitkeep)
+backend/uploads/*
+!backend/uploads/apropos/
+backend/uploads/apropos/*
+!backend/uploads/apropos/.gitkeep

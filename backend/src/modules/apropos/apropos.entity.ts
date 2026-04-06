@@ -137,6 +137,20 @@ export class AproposContent {
   })
   highlight3!: string;
 
+  @ApiProperty({
+    description: "URL de l'image de la section à propos",
+    example: '/uploads/apropos/photo.jpg',
+    nullable: true,
+  })
+  @Column({
+    name: 'image_url',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+    default: null,
+  })
+  imageUrl!: string | null;
+
   @ApiProperty({ description: 'Date de création' })
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

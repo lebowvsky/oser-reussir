@@ -15,6 +15,7 @@ interface AproposData {
   highlight1: string
   highlight2: string
   highlight3: string
+  imageUrl: string | null
 }
 
 const DEFAULT_APROPOS: AproposData = {
@@ -28,14 +29,42 @@ const DEFAULT_APROPOS: AproposData = {
   highlight1: 'Enseignante en lycée professionnel',
   highlight2: 'Formée au coaching scolaire',
   highlight3: 'Approche bienveillante et individualisée',
+  imageUrl: null,
+}
+
+interface AproposApiResponse extends Omit<AproposData, 'imageUrl'> {
+  imageUrl?: string | null
 }
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: aproposRaw } = await useFetch<AproposData>(`${baseUrl}/apropos`)
-const apropos = computed(() => aproposRaw.value ?? DEFAULT_APROPOS)
+const { data: aproposRaw } = await useFetch<AproposApiResponse>(`${baseUrl}/apropos`)
 
-const photoSrc = '/images/coach-placeholder.jpg'
+const apropos = computed<AproposData>(() => {
+  if (!aproposRaw.value) return DEFAULT_APROPOS
+  const raw = aproposRaw.value
+  return {
+    eyebrow: raw.eyebrow,
+    title: raw.title,
+    paragraph1: raw.paragraph1,
+    paragraph2: raw.paragraph2,
+    paragraph3: raw.paragraph3,
+    badgeNumber: raw.badgeNumber,
+    badgeLabel: raw.badgeLabel,
+    highlight1: raw.highlight1,
+    highlight2: raw.highlight2,
+    highlight3: raw.highlight3,
+    imageUrl: raw.imageUrl ?? null,
+  }
+})
+
+const photoSrc = computed(() => {
+  const url = apropos.value.imageUrl
+  if (url) {
+    return `${config.public.apiBase}${url}`
+  }
+  return '/images/coach-placeholder.jpg'
+})
 </script>
 
 <template>

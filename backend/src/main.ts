@@ -2,10 +2,12 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as path from 'path';
 import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
 
   const port = configService.get<number>('BACKEND_PORT', 4000);
@@ -14,6 +16,11 @@ async function bootstrap(): Promise<void> {
     .get<string>('CORS_ORIGINS', 'http://localhost:3000')
     .split(',')
     .map((origin) => origin.trim());
+
+  // Fichiers statiques (uploads)
+  app.useStaticAssets(path.join(process.cwd(), 'uploads'), {
+    prefix: '/uploads/',
+  });
 
   // CORS
   app.enableCors({ origin: corsOrigins, credentials: true });

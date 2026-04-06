@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateAproposDto {
   @ApiProperty({
@@ -85,4 +85,12 @@ export class UpdateAproposDto {
   @IsString()
   @IsNotEmpty()
   highlight3!: string;
+
+  @ApiPropertyOptional({
+    description: "URL de l'image de la section à propos",
+    example: '/uploads/apropos/photo.jpg',
+  })
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
 }

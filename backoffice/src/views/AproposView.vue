@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { UserRound, Save, CheckCircle, AlertCircle } from 'lucide-vue-next'
+import { UserRound, Save, CheckCircle, AlertCircle, ImagePlus, Trash2 } from 'lucide-vue-next'
 import { api } from '@/lib/api'
 import type { AproposContent } from '@/types/apropos'
 import RichTextEditor from '@/components/RichTextEditor.vue'
+
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024 // 2 MB
+const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim()
 
@@ -18,6 +21,18 @@ const form = ref({
   highlight1: '',
   highlight2: '',
   highlight3: '',
+})
+
+const imageUrl = ref<string | null>(null)
+const uploading = ref(false)
+const deleting = ref(false)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+const imagePreviewSrc = computed(() => {
+  if (imageUrl.value) {
+    return `/api${imageUrl.value}`
+  }
+  return null
 })
 
 const loading = ref(true)
@@ -45,6 +60,76 @@ const isFormValid = computed(() =>
   && form.value.highlight3.trim() !== '',
 )
 
+function triggerFileInput(): void {
+  fileInput.value?.click()
+}
+
+async function onFileSelected(event: Event): Promise<void> {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  if (!file) return
+
+  // Reset input so the same file can be re-selected
+  target.value = ''
+
+  if (!ACCEPTED_TYPES.includes(file.type)) {
+    showToast('error', 'Format non supporté. Utilisez JPEG, PNG ou WebP.')
+    return
+  }
+
+  if (file.size > MAX_IMAGE_SIZE) {
+    showToast('error', 'L\'image ne doit pas dépasser 2 Mo.')
+    return
+  }
+
+  uploading.value = true
+  try {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const token = localStorage.getItem('auth_token')
+    const res = await fetch('/api/apropos/image', {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    })
+
+    if (!res.ok) throw new Error(`Upload failed: ${res.status}`)
+
+    const data = await res.json()
+    imageUrl.value = data.imageUrl ?? null
+    showToast('success', 'Image mise à jour avec succès.')
+  } catch {
+    showToast('error', 'Erreur lors de l\'envoi de l\'image.')
+  } finally {
+    uploading.value = false
+  }
+}
+
+async function onDeleteImage(): Promise<void> {
+  deleting.value = true
+  try {
+    const token = localStorage.getItem('auth_token')
+    const res = await fetch('/api/apropos/image', {
+      method: 'DELETE',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    })
+
+    if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
+
+    imageUrl.value = null
+    showToast('success', 'Image supprimée avec succès.')
+  } catch {
+    showToast('error', 'Erreur lors de la suppression de l\'image.')
+  } finally {
+    deleting.value = false
+  }
+}
+
 onMounted(async () => {
   try {
     const data = await api.get<AproposContent>('/apropos')
@@ -60,6 +145,7 @@ onMounted(async () => {
       highlight2: data.highlight2,
       highlight3: data.highlight3,
     }
+    imageUrl.value = data.imageUrl ?? null
   } catch (error) {
     showToast('error', 'Impossible de charger les données de la section À propos.')
   } finally {
@@ -112,6 +198,67 @@ const onSave = async (): Promise<void> => {
     </Transition>
 
     <template v-if="!loading">
+      <!-- Image upload -->
+      <div class="apropos-form apropos-form--image">
+        <div class="apropos-form__field">
+          <label class="apropos-form__label">Image de la section</label>
+          <div class="image-upload">
+            <div
+              class="image-upload__preview"
+              :class="{ 'image-upload__preview--empty': !imagePreviewSrc }"
+              role="button"
+              tabindex="0"
+              @click="triggerFileInput"
+              @keydown.enter.prevent="triggerFileInput"
+              @keydown.space.prevent="triggerFileInput"
+            >
+              <img
+                v-if="imagePreviewSrc"
+                :src="imagePreviewSrc"
+                alt="Aperçu de l'image À propos"
+                class="image-upload__img"
+              />
+              <div v-else class="image-upload__placeholder">
+                <ImagePlus :size="32" />
+                <span>Cliquez pour ajouter une image</span>
+              </div>
+              <div v-if="uploading" class="image-upload__overlay">
+                <span>Envoi en cours…</span>
+              </div>
+            </div>
+            <input
+              ref="fileInput"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              class="image-upload__input"
+              @change="onFileSelected"
+            />
+            <div class="image-upload__actions">
+              <button
+                type="button"
+                class="image-upload__btn image-upload__btn--upload"
+                :disabled="uploading"
+                @click="triggerFileInput"
+              >
+                <ImagePlus :size="16" />
+                <span>{{ uploading ? 'Envoi…' : 'Choisir une image' }}</span>
+              </button>
+              <button
+                v-if="imagePreviewSrc"
+                type="button"
+                class="image-upload__btn image-upload__btn--delete"
+                :disabled="deleting"
+                @click="onDeleteImage"
+              >
+                <Trash2 :size="16" />
+                <span>{{ deleting ? 'Suppression…' : 'Supprimer' }}</span>
+              </button>
+            </div>
+            <p class="image-upload__hint">JPEG, PNG ou WebP — 2 Mo max — ratio 4:5 recommandé</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Form -->
       <form class="apropos-form" @submit.prevent="onSave" novalidate>
         <div class="apropos-form__field">
@@ -380,6 +527,124 @@ const onSave = async (): Promise<void> => {
       border-color: hsl(0, 65%, 55%);
       box-shadow: 0 0 0 3px hsla(0, 65%, 55%, 0.15);
     }
+  }
+}
+
+.apropos-form--image {
+  margin-bottom: $spacing-lg;
+}
+
+.image-upload {
+  &__preview {
+    position: relative;
+    width: 200px;
+    aspect-ratio: 4 / 5;
+    border-radius: $radius-sm;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid $color-border;
+    transition: border-color $duration-fast $ease;
+
+    &:hover {
+      border-color: $color-primary;
+    }
+
+    &--empty {
+      border-style: dashed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $color-text-muted;
+    font-size: $font-size-xs;
+    text-align: center;
+    padding: $spacing-md;
+  }
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: $font-size-sm;
+    font-weight: 600;
+  }
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-sm;
+    margin-top: $spacing-sm;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $duration-fast $ease;
+
+    &--upload {
+      background-color: $color-background;
+      color: $color-text;
+
+      &:hover:not(:disabled) {
+        border-color: $color-primary;
+        color: $color-primary;
+      }
+    }
+
+    &--delete {
+      background-color: $color-background;
+      color: hsl(0, 65%, 55%);
+      border-color: hsl(0, 65%, 55%, 0.3);
+
+      &:hover:not(:disabled) {
+        background-color: hsl(0, 65%, 55%, 0.08);
+        border-color: hsl(0, 65%, 55%);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__hint {
+    margin-top: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
   }
 }
 
