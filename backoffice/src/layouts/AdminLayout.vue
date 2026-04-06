@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { RouterView, RouterLink, useRoute } from 'vue-router'
+import { RouterView, RouterLink, useRoute, useRouter } from 'vue-router'
 import {
   Sparkles,
   UserRound,
@@ -9,8 +9,10 @@ import {
   HelpCircle,
   Mail,
   Share2,
+  LogOut,
 } from 'lucide-vue-next'
 import type { Component } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 interface NavItem {
   label: string
@@ -33,6 +35,13 @@ const utilLinks: readonly NavItem[] = [
 ]
 
 const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+const onLogout = (): void => {
+  authStore.logout()
+  router.push({ name: 'login' })
+}
 </script>
 
 <template>
@@ -81,6 +90,14 @@ const route = useRoute()
           <span>{{ item.label }}</span>
         </RouterLink>
       </nav>
+
+      <!-- Logout -->
+      <div class="sidebar__footer">
+        <button class="sidebar__logout" @click="onLogout">
+          <LogOut :size="18" :stroke-width="2" />
+          <span>Déconnexion</span>
+        </button>
+      </div>
     </aside>
 
     <main class="admin-layout__content">
@@ -166,6 +183,35 @@ const route = useRoute()
     border: none;
     border-top: 1px solid $color-sidebar-hover;
     margin: $spacing-md 0;
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-sidebar-hover;
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    width: 100%;
+    color: $color-sidebar-text;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-md;
+    border: none;
+    background: none;
+    font-family: $font-body;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color $duration-fast $ease,
+      color $duration-fast $ease;
+
+    &:hover {
+      background-color: hsla(0, 72%, 51%, 0.15);
+      color: hsl(0, 72%, 70%);
+    }
   }
 }
 </style>
