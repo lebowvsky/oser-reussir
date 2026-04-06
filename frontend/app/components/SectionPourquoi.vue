@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * Pourquoi Oser Réussir — section éditoriale avec bénéfices + citation.
+ * Pourquoi Oser Réussir — section éditoriale avec bénéfices du coaching.
  */
 interface Benefice {
   readonly id: string
@@ -39,8 +39,10 @@ const benefices: readonly Benefice[] = [
           d'aider le jeune à mieux se connaître, à comprendre ce qui bloque
           et à retrouver une dynamique positive.
         </p>
+      </div>
 
-        <h3 class="pourquoi__subtitle">Ce que le coaching apporte</h3>
+      <div class="pourquoi__card" data-reveal>
+        <h3 class="pourquoi__card-title">Ce que le coaching apporte</h3>
         <ul class="pourquoi__list">
           <li v-for="benefice in benefices" :key="benefice.id">
             <span class="pourquoi__check" aria-hidden="true">
@@ -61,30 +63,6 @@ const benefices: readonly Benefice[] = [
           </li>
         </ul>
       </div>
-
-      <figure class="pourquoi__quote" data-reveal>
-        <svg
-          class="pourquoi__quote-mark"
-          viewBox="0 0 48 48"
-          width="48"
-          height="48"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            d="M14 10c-5 0-9 4-9 9v19h14V19H10c0-2 2-4 4-4zm24 0c-5 0-9 4-9 9v19h14V19H34c0-2 2-4 4-4z"
-          />
-        </svg>
-        <blockquote>
-          <p>
-            Oser Réussir, c'est croire que chaque jeune a le droit d'apprendre
-            à son rythme, avec ses propres outils et toute sa singularité.
-          </p>
-        </blockquote>
-        <figcaption class="pourquoi__quote-author">
-          — Oser Réussir, coaching scolaire
-        </figcaption>
-      </figure>
     </div>
   </section>
 </template>
@@ -142,16 +120,24 @@ const benefices: readonly Benefice[] = [
   margin-bottom: $spacing-md;
 }
 
-.pourquoi__subtitle {
+.pourquoi__card {
+  position: relative;
+  padding: $spacing-2xl;
+  background-color: color("surface");
+  border-radius: $radius-xl;
+  box-shadow: $shadow-medium;
+}
+
+.pourquoi__card-title {
   font-size: $font-size-lg;
-  margin-top: $spacing-xl;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-lg;
+  color: color("ink");
 }
 
 .pourquoi__list {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
+  gap: $spacing-md;
 }
 
 .pourquoi__list li {
@@ -175,37 +161,6 @@ const benefices: readonly Benefice[] = [
   flex-shrink: 0;
 }
 
-.pourquoi__quote {
-  position: relative;
-  padding: $spacing-2xl;
-  background-color: color("surface");
-  border-radius: $radius-xl;
-  box-shadow: $shadow-medium;
-  margin: 0;
-}
-
-.pourquoi__quote-mark {
-  color: tint("terracotta", 14);
-  opacity: 0.45;
-  margin-bottom: $spacing-md;
-}
-
-.pourquoi__quote blockquote p {
-  font-family: $font-display;
-  font-size: $font-size-xl;
-  line-height: 1.4;
-  color: color("ink");
-  font-style: italic;
-  margin-bottom: $spacing-lg;
-}
-
-.pourquoi__quote-author {
-  font-size: $font-size-sm;
-  font-weight: 600;
-  color: shade("terracotta", 16);
-  letter-spacing: 0.02em;
-}
-
 @media (min-width: 960px) {
   .pourquoi__inner {
     grid-template-columns: 6fr 5fr;
@@ -215,11 +170,8 @@ const benefices: readonly Benefice[] = [
 }
 
 @include respond-below($breakpoint-sm) {
-  .pourquoi__quote {
+  .pourquoi__card {
     padding: $spacing-xl;
-  }
-  .pourquoi__quote blockquote p {
-    font-size: $font-size-lg;
   }
 }
 </style>
