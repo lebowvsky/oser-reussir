@@ -3,6 +3,9 @@ import { ref, computed, onMounted } from 'vue'
 import { UserRound, Save, CheckCircle, AlertCircle } from 'lucide-vue-next'
 import { api } from '@/lib/api'
 import type { AproposContent } from '@/types/apropos'
+import RichTextEditor from '@/components/RichTextEditor.vue'
+
+const stripHtml = (html: string) => html.replace(/<[^>]*>/g, '').trim()
 
 const form = ref({
   eyebrow: '',
@@ -32,9 +35,9 @@ function showToast(type: 'success' | 'error', message: string): void {
 const isFormValid = computed(() =>
   form.value.eyebrow.trim() !== ''
   && form.value.title.trim() !== ''
-  && form.value.paragraph1.trim() !== ''
-  && form.value.paragraph2.trim() !== ''
-  && form.value.paragraph3.trim() !== ''
+  && stripHtml(form.value.paragraph1) !== ''
+  && stripHtml(form.value.paragraph2) !== ''
+  && stripHtml(form.value.paragraph3) !== ''
   && form.value.badgeNumber.trim() !== ''
   && form.value.badgeLabel.trim() !== ''
   && form.value.highlight1.trim() !== ''
@@ -137,36 +140,30 @@ const onSave = async (): Promise<void> => {
         </div>
 
         <div class="apropos-form__field">
-          <label for="paragraph1" class="apropos-form__label">Premier paragraphe</label>
-          <textarea
-            id="paragraph1"
+          <label class="apropos-form__label">Premier paragraphe</label>
+          <RichTextEditor
             v-model="form.paragraph1"
-            class="apropos-form__textarea"
-            :class="{ 'apropos-form__textarea--error': submitted && !form.paragraph1.trim() }"
+            :class="{ 'rich-editor--error': submitted && !stripHtml(form.paragraph1) }"
           />
-          <span v-if="submitted && !form.paragraph1.trim()" class="apropos-form__error">Ce champ est requis</span>
+          <span v-if="submitted && !stripHtml(form.paragraph1)" class="apropos-form__error">Ce champ est requis</span>
         </div>
 
         <div class="apropos-form__field">
-          <label for="paragraph2" class="apropos-form__label">Deuxième paragraphe</label>
-          <textarea
-            id="paragraph2"
+          <label class="apropos-form__label">Deuxième paragraphe</label>
+          <RichTextEditor
             v-model="form.paragraph2"
-            class="apropos-form__textarea"
-            :class="{ 'apropos-form__textarea--error': submitted && !form.paragraph2.trim() }"
+            :class="{ 'rich-editor--error': submitted && !stripHtml(form.paragraph2) }"
           />
-          <span v-if="submitted && !form.paragraph2.trim()" class="apropos-form__error">Ce champ est requis</span>
+          <span v-if="submitted && !stripHtml(form.paragraph2)" class="apropos-form__error">Ce champ est requis</span>
         </div>
 
         <div class="apropos-form__field">
-          <label for="paragraph3" class="apropos-form__label">Troisième paragraphe</label>
-          <textarea
-            id="paragraph3"
+          <label class="apropos-form__label">Troisième paragraphe</label>
+          <RichTextEditor
             v-model="form.paragraph3"
-            class="apropos-form__textarea"
-            :class="{ 'apropos-form__textarea--error': submitted && !form.paragraph3.trim() }"
+            :class="{ 'rich-editor--error': submitted && !stripHtml(form.paragraph3) }"
           />
-          <span v-if="submitted && !form.paragraph3.trim()" class="apropos-form__error">Ce champ est requis</span>
+          <span v-if="submitted && !stripHtml(form.paragraph3)" class="apropos-form__error">Ce champ est requis</span>
         </div>
 
         <div class="apropos-form__field">

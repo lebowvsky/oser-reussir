@@ -63,9 +63,9 @@ const photoSrc = '/images/coach-placeholder.jpg'
         <h2 id="apropos-title" class="section__title">
           {{ apropos.title }}
         </h2>
-        <p>{{ apropos.paragraph1 }}</p>
+        <p v-html="apropos.paragraph1"></p>
         <p v-html="apropos.paragraph2"></p>
-        <p>{{ apropos.paragraph3 }}</p>
+        <p v-html="apropos.paragraph3"></p>
 
         <ul class="apropos__highlights">
           <li>
