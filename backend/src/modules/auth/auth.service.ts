@@ -24,27 +24,34 @@ export class AuthService implements OnModuleInit {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    const count = await this.userRepo.count();
+    try {
+      const count = await this.userRepo.count();
 
-    if (count > 0) {
-      return;
-    }
+      if (count > 0) {
+        return;
+      }
 
-    const email = this.configService.get<string>('ADMIN_EMAIL');
-    const password = this.configService.get<string>('ADMIN_PASSWORD');
+      const email = this.configService.get<string>('ADMIN_EMAIL');
+      const password = this.configService.get<string>('ADMIN_PASSWORD');
 
-    if (!email || !password) {
+      if (!email || !password) {
+        this.logger.warn(
+          'Aucun administrateur en base. Définissez ADMIN_EMAIL et ADMIN_PASSWORD pour créer le compte initial.',
+        );
+        return;
+      }
+
+      const hash = await bcrypt.hash(password, 10);
+      const user = this.userRepo.create({ email, password: hash });
+      await this.userRepo.save(user);
+
+      this.logger.log('Admin user seeded from environment variables');
+    } catch (error) {
       this.logger.warn(
-        'Aucun administrateur en base. Définissez ADMIN_EMAIL et ADMIN_PASSWORD pour créer le compte initial.',
+        'Impossible de vérifier/créer l\'administrateur initial. La migration a-t-elle été exécutée ? ' +
+          (error instanceof Error ? error.message : String(error)),
       );
-      return;
     }
-
-    const hash = await bcrypt.hash(password, 10);
-    const user = this.userRepo.create({ email, password: hash });
-    await this.userRepo.save(user);
-
-    this.logger.log('Admin user seeded from environment variables');
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {
