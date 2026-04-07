@@ -25,8 +25,8 @@ import { AuthModule } from './modules/auth/auth.module';
         DATABASE_URL: Joi.string().required(),
         JWT_SECRET: Joi.string().min(32).required(),
         CORS_ORIGINS: Joi.string().required(),
-        ADMIN_EMAIL: Joi.string().email().required(),
-        ADMIN_PASSWORD: Joi.string().min(8).required(),
+        ADMIN_EMAIL: Joi.string().email().optional(),
+        ADMIN_PASSWORD: Joi.string().min(8).optional(),
       }),
     }),
 

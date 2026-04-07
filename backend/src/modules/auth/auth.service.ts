@@ -26,16 +26,25 @@ export class AuthService implements OnModuleInit {
   async onModuleInit(): Promise<void> {
     const count = await this.userRepo.count();
 
-    if (count === 0) {
-      const email = this.configService.get<string>('ADMIN_EMAIL');
-      const password = this.configService.get<string>('ADMIN_PASSWORD');
-      const hash = await bcrypt.hash(password!, 10);
-
-      const user = this.userRepo.create({ email: email!, password: hash });
-      await this.userRepo.save(user);
-
-      this.logger.log('Admin user seeded from environment variables');
+    if (count > 0) {
+      return;
     }
+
+    const email = this.configService.get<string>('ADMIN_EMAIL');
+    const password = this.configService.get<string>('ADMIN_PASSWORD');
+
+    if (!email || !password) {
+      this.logger.warn(
+        'Aucun administrateur en base. Définissez ADMIN_EMAIL et ADMIN_PASSWORD pour créer le compte initial.',
+      );
+      return;
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+    const user = this.userRepo.create({ email, password: hash });
+    await this.userRepo.save(user);
+
+    this.logger.log('Admin user seeded from environment variables');
   }
 
   async validateUser(email: string, password: string): Promise<User | null> {
