@@ -25,6 +25,8 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       BACKEND_PORT: ${BACKEND_PORT}
       CORS_ORIGINS: ${CORS_ORIGINS}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     volumes:
       - backend_uploads:/app/uploads
     ports:

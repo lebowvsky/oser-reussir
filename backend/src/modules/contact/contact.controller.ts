@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { ContactService } from './contact.service';
 import { ContactContent } from './contact.entity';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('contact')
 @Controller('contact')
@@ -25,7 +26,7 @@ export class ContactController {
     return this.contactService.getContact();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour les informations de contact' })

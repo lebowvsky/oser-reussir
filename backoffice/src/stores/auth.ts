@@ -19,5 +19,22 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('auth_token')
   }
 
-  return { token, user, isAuthenticated, login, logout }
+  function initialize(): void {
+    if (token.value) {
+      try {
+        const payload = JSON.parse(atob(token.value.split('.')[1]))
+        user.value = { email: payload.email }
+
+        if (payload.exp * 1000 < Date.now()) {
+          logout()
+        }
+      } catch {
+        logout()
+      }
+    }
+  }
+
+  initialize()
+
+  return { token, user, isAuthenticated, login, logout, initialize }
 })

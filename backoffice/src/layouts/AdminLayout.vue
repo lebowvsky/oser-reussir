@@ -10,6 +10,7 @@ import {
   Mail,
   Share2,
   LogOut,
+  Settings,
 } from 'lucide-vue-next'
 import type { Component } from 'vue'
 import { useAuthStore } from '@/stores/auth'
@@ -32,6 +33,7 @@ const sectionLinks: readonly NavItem[] = [
 
 const utilLinks: readonly NavItem[] = [
   { label: 'Réseaux sociaux', to: '/admin/reseaux-sociaux', icon: Share2 },
+  { label: 'Paramètres', to: '/admin/parametres', icon: Settings },
 ]
 
 const route = useRoute()

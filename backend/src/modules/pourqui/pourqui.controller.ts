@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { PourquiService } from './pourqui.service';
 import { PourquiContent } from './pourqui-content.entity';
 import { UpdatePourquiDto } from './dto/update-pourqui.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('pourqui')
 @Controller('pourqui')
@@ -25,7 +26,7 @@ export class PourquiController {
     return this.pourquiService.getPourqui();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section pour qui' })

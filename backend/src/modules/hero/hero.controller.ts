@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { HeroService } from './hero.service';
 import { HeroContent } from './hero.entity';
 import { UpdateHeroDto } from './dto/update-hero.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('hero')
 @Controller('hero')
@@ -25,7 +26,7 @@ export class HeroController {
     return this.heroService.getHero();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section hero' })

@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { ValeursService } from './valeurs.service';
 import { ValeursContent } from './valeurs-content.entity';
 import { UpdateValeursDto } from './dto/update-valeurs.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('valeurs')
 @Controller('valeurs')
@@ -25,7 +26,7 @@ export class ValeursController {
     return this.valeursService.getValeurs();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section valeurs' })

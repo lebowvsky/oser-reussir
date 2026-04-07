@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { PourquoiService } from './pourquoi.service';
 import { PourquoiContent } from './pourquoi-content.entity';
 import { UpdatePourquoiDto } from './dto/update-pourquoi.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('pourquoi')
 @Controller('pourquoi')
@@ -25,7 +26,7 @@ export class PourquoiController {
     return this.pourquoiService.getPourquoi();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section pourquoi' })

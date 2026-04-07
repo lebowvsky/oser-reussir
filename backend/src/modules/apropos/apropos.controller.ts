@@ -5,6 +5,7 @@ import {
   Post,
   Delete,
   Body,
+  UseGuards,
   UseInterceptors,
   UploadedFile,
   ParseFilePipe,
@@ -25,6 +26,7 @@ import {
 import { AproposService } from './apropos.service';
 import { AproposContent } from './apropos.entity';
 import { UpdateAproposDto } from './dto/update-apropos.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 interface UploadedFile {
   originalname: string;
@@ -49,7 +51,7 @@ export class AproposController {
     return this.aproposService.getApropos();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section a propos' })
@@ -63,7 +65,7 @@ export class AproposController {
     return this.aproposService.updateApropos(dto);
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('image')
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('image'))
@@ -102,7 +104,7 @@ export class AproposController {
     return this.aproposService.saveImage(file);
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete('image')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)

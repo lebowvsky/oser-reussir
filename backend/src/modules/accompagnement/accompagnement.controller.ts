@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,6 +8,7 @@ import {
 import { AccompagnementService } from './accompagnement.service';
 import { AccompagnementContent } from './accompagnement-content.entity';
 import { UpdateAccompagnementDto } from './dto/update-accompagnement.dto';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 
 @ApiTags('accompagnement')
 @Controller('accompagnement')
@@ -25,7 +26,7 @@ export class AccompagnementController {
     return this.accompagnementService.getAccompagnement();
   }
 
-  // TODO: @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mettre a jour le contenu de la section accompagnement' })

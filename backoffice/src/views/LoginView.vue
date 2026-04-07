@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { api } from '@/lib/api'
 import { LogIn, Eye, EyeOff } from 'lucide-vue-next'
 
 const router = useRouter()
@@ -24,12 +25,11 @@ const onSubmit = async (): Promise<void> => {
   loading.value = true
 
   try {
-    // TODO: remplacer par un appel API réel
-    // POST /api/auth/login { email, password } → { access_token }
-    await new Promise((resolve) => setTimeout(resolve, 800))
-
-    // Simulation — accepte n'importe quels identifiants pour le moment
-    authStore.login(email.value, 'temp_dev_token')
+    const data = await api.post<{ access_token: string }>('/auth/login', {
+      email: email.value,
+      password: password.value,
+    })
+    authStore.login(email.value, data.access_token)
     router.push('/admin')
   } catch {
     error.value = 'Identifiants incorrects. Veuillez réessayer.'

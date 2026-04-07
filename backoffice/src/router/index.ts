@@ -58,6 +58,11 @@ const routes: RouteRecordRaw[] = [
         name: 'reseaux-sociaux',
         component: () => import('@/views/ReseauxSociauxView.vue'),
       },
+      {
+        path: 'parametres',
+        name: 'parametres',
+        component: () => import('@/views/ParametresView.vue'),
+      },
     ],
   },
   {

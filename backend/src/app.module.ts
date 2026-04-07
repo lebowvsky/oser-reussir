@@ -10,6 +10,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { AccompagnementModule } from './modules/accompagnement/accompagnement.module';
 import { ValeursModule } from './modules/valeurs/valeurs.module';
 import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
         DATABASE_URL: Joi.string().required(),
         JWT_SECRET: Joi.string().min(32).required(),
         CORS_ORIGINS: Joi.string().required(),
+        ADMIN_EMAIL: Joi.string().email().required(),
+        ADMIN_PASSWORD: Joi.string().min(8).required(),
       }),
     }),
 
@@ -48,6 +51,7 @@ import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
     AccompagnementModule,
     ValeursModule,
     PourquoiModule,
+    AuthModule,
   ],
   controllers: [HealthController],
 })
