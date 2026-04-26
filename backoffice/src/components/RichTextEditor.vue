@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { watch } from 'vue'
+import Link from '@tiptap/extension-link'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{
   modelValue: string
@@ -10,6 +11,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
+
+const showLinkInput = ref(false)
+const linkUrl = ref('')
+const linkInputRef = ref<HTMLInputElement | null>(null)
 
 const editor = useEditor({
   content: props.modelValue,
@@ -24,11 +29,48 @@ const editor = useEditor({
       horizontalRule: false,
       listItem: false,
     }),
+    Link.configure({
+      openOnClick: false,
+      HTMLAttributes: {
+        target: '_blank',
+        rel: 'noopener noreferrer',
+      },
+    }),
   ],
   onUpdate: ({ editor }) => {
     emit('update:modelValue', editor.getHTML())
   },
 })
+
+function openLinkInput() {
+  if (!editor.value) return
+  const existingHref = editor.value.getAttributes('link').href
+  linkUrl.value = existingHref || ''
+  showLinkInput.value = true
+  setTimeout(() => linkInputRef.value?.focus(), 0)
+}
+
+function applyLink() {
+  if (!editor.value) return
+  const url = linkUrl.value.trim()
+  if (url) {
+    editor.value.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+  } else {
+    editor.value.chain().focus().extendMarkRange('link').unsetLink().run()
+  }
+  closeLinkInput()
+}
+
+function removeLink() {
+  if (!editor.value) return
+  editor.value.chain().focus().extendMarkRange('link').unsetLink().run()
+  closeLinkInput()
+}
+
+function closeLinkInput() {
+  showLinkInput.value = false
+  linkUrl.value = ''
+}
 
 watch(() => props.modelValue, (newValue) => {
   if (editor.value && editor.value.getHTML() !== newValue) {
@@ -67,6 +109,44 @@ watch(() => props.modelValue, (newValue) => {
       >
         <u>U</u>
       </button>
+
+      <span class="rich-editor__separator" />
+
+      <div class="rich-editor__link-wrapper">
+        <button
+          type="button"
+          class="rich-editor__button"
+          :class="{ 'rich-editor__button--active': editor.isActive('link') }"
+          @click="openLinkInput"
+          title="Lien"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </button>
+
+        <div v-if="showLinkInput" class="rich-editor__link-popover">
+          <input
+            ref="linkInputRef"
+            v-model="linkUrl"
+            type="url"
+            class="rich-editor__link-input"
+            placeholder="https://example.com"
+            @keydown.enter.prevent="applyLink"
+            @keydown.escape="closeLinkInput"
+          />
+          <button type="button" class="rich-editor__link-action rich-editor__link-action--apply" @click="applyLink" title="Appliquer">
+            ✓
+          </button>
+          <button
+            v-if="editor.isActive('link')"
+            type="button"
+            class="rich-editor__link-action rich-editor__link-action--remove"
+            @click="removeLink"
+            title="Supprimer le lien"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
     </div>
     <EditorContent :editor="editor" class="rich-editor__content" />
   </div>
@@ -135,6 +215,78 @@ watch(() => props.modelValue, (newValue) => {
     }
   }
 
+  &__separator {
+    width: 1px;
+    height: 18px;
+    background-color: $color-border;
+    margin: 0 $spacing-xs;
+  }
+
+  &__link-wrapper {
+    position: relative;
+  }
+
+  &__link-popover {
+    position: absolute;
+    top: calc(100% + $spacing-xs);
+    left: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs;
+    background: $color-background;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &__link-input {
+    width: 220px;
+    padding: 4px $spacing-xs;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-family: $font-body;
+    font-size: $font-size-xs;
+    color: $color-text;
+    outline: none;
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+
+  &__link-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: $radius-sm;
+    font-size: 12px;
+    cursor: pointer;
+    line-height: 1;
+
+    &--apply {
+      background-color: $color-primary;
+      color: $color-white;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    &--remove {
+      background-color: hsl(0, 65%, 55%);
+      color: $color-white;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+
   &__content {
     :deep(.ProseMirror) {
       min-height: 100px;
@@ -150,6 +302,12 @@ watch(() => props.modelValue, (newValue) => {
         &:last-child {
           margin-bottom: 0;
         }
+      }
+
+      a {
+        color: $color-primary;
+        text-decoration: underline;
+        cursor: pointer;
       }
     }
   }

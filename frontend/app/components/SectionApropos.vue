@@ -204,6 +204,16 @@ const photoSrc = computed(() => {
   font-weight: 700;
 }
 
+.apropos__content :deep(a) {
+  color: color("primary");
+  text-decoration: underline;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: shade("primary", 16);
+  }
+}
+
 .apropos__highlights {
   margin-top: $spacing-xl;
   display: flex;

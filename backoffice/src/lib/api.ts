@@ -1,10 +1,9 @@
 const API_BASE = '/api'
 
 function handle401(res: Response): void {
-  if (res.status === 401) {
+  if (res.status === 401 && localStorage.getItem('auth_token')) {
     localStorage.removeItem('auth_token')
     window.location.href = '/login'
-    throw new Error('Session expirée')
   }
 }
 
