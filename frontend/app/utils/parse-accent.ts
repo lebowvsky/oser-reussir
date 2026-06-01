@@ -13,7 +13,7 @@ export function parseAccentTitle(raw: string): TitleSegment[] {
     if (match.index > lastIndex) {
       segments.push({ text: raw.slice(lastIndex, match.index), accent: false })
     }
-    segments.push({ text: match[1], accent: true })
+    segments.push({ text: match[1] ?? '', accent: true })
     lastIndex = regex.lastIndex
   }
 
