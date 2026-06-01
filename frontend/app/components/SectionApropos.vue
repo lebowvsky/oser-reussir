@@ -94,9 +94,9 @@ const photoSrc = computed(() => {
         <h2 id="apropos-title" class="section__title">
           {{ apropos.title }}
         </h2>
-        <p v-html="apropos.paragraph1"></p>
-        <p v-html="apropos.paragraph2"></p>
-        <p v-html="apropos.paragraph3"></p>
+        <div class="apropos__text" v-html="apropos.paragraph1"></div>
+        <div class="apropos__text" v-html="apropos.paragraph2"></div>
+        <div class="apropos__text" v-html="apropos.paragraph3"></div>
 
         <ul class="apropos__highlights">
           <li>
@@ -196,9 +196,14 @@ const photoSrc = computed(() => {
   line-height: 1.3;
 }
 
-.apropos__content p {
+.apropos__content .apropos__text {
   margin-bottom: $spacing-md;
   font-size: $font-size-md;
+}
+/* Le contenu riche (TipTap) peut envelopper le texte dans un <p> : on
+   neutralise sa marge par défaut, l'espacement est porté par .apropos__text. */
+.apropos__content .apropos__text :deep(p) {
+  margin: 0;
 }
 
 .apropos__content strong {
