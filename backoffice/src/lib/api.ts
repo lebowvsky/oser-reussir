@@ -49,4 +49,21 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return res.json()
 }
 
-export const api = { get, put, post }
+async function del<T>(path: string): Promise<T> {
+  const token = localStorage.getItem('auth_token')
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'DELETE',
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
+  handle401(res)
+  if (!res.ok) throw new Error(`API error: ${res.status}`)
+  if (res.status === 204 || res.headers.get('content-length') === '0') {
+    return undefined as T
+  }
+  const text = await res.text()
+  return (text ? JSON.parse(text) : undefined) as T
+}
+
+export const api = { get, put, post, del }

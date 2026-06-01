@@ -7,6 +7,7 @@ import {
   HandHeart,
   Heart,
   HelpCircle,
+  MessageSquareQuote,
   Mail,
   Share2,
   LogOut,
@@ -28,6 +29,7 @@ const sectionLinks: readonly NavItem[] = [
   { label: 'Accompagnement', to: '/admin/accompagnement', icon: HandHeart },
   { label: 'Valeurs', to: '/admin/valeurs', icon: Heart },
   { label: 'Pourquoi ?', to: '/admin/pourquoi', icon: HelpCircle },
+  { label: 'Témoignages', to: '/admin/temoignages', icon: MessageSquareQuote },
   { label: 'Contact', to: '/admin/contact', icon: Mail },
 ]
 

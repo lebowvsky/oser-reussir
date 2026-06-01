@@ -41,6 +41,7 @@ useScrollReveal()
     <SectionAccompagnement />
     <SectionValeurs />
     <SectionPourquoi />
+    <SectionTemoignages />
     <SectionContact />
   </div>
 </template>

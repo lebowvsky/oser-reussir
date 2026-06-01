@@ -10,6 +10,7 @@ import { ContactModule } from './modules/contact/contact.module';
 import { AccompagnementModule } from './modules/accompagnement/accompagnement.module';
 import { ValeursModule } from './modules/valeurs/valeurs.module';
 import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
+import { TemoignagesModule } from './modules/temoignages/temoignages.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
@@ -51,6 +52,7 @@ import { AuthModule } from './modules/auth/auth.module';
     AccompagnementModule,
     ValeursModule,
     PourquoiModule,
+    TemoignagesModule,
     AuthModule,
   ],
   controllers: [HealthController],
