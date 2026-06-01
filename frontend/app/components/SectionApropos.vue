@@ -38,7 +38,9 @@ interface AproposApiResponse extends Omit<AproposData, 'imageUrl'> {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: aproposRaw } = await useFetch<AproposApiResponse>(`${baseUrl}/apropos`)
+const { data: aproposRaw } = await useFetch<AproposApiResponse>(`${baseUrl}/apropos`, {
+  key: 'apropos',
+})
 
 const apropos = computed<AproposData>(() => {
   if (!aproposRaw.value) return DEFAULT_APROPOS

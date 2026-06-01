@@ -17,7 +17,9 @@ const DEFAULT_CONTACT: ContactData = { phone: '', email: '' }
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: contactRaw } = await useFetch<ContactData>(`${baseUrl}/contact`)
+const { data: contactRaw } = await useFetch<ContactData>(`${baseUrl}/contact`, {
+  key: 'contact',
+})
 const contact = computed(() => contactRaw.value ?? DEFAULT_CONTACT)
 </script>
 
@@ -104,7 +106,7 @@ const contact = computed(() => contactRaw.value ?? DEFAULT_CONTACT)
             v-if="contact.phone"
             :href="`tel:${contact.phone}`"
             class="contact__method"
-            aria-label="Appeler au {{ contact.phone }}"
+            :aria-label="`Appeler au ${contact.phone}`"
           >
             <span class="contact__method-icon" aria-hidden="true">
               <svg
@@ -136,7 +138,7 @@ const contact = computed(() => contactRaw.value ?? DEFAULT_CONTACT)
             v-if="contact.email"
             :href="`mailto:${contact.email}`"
             class="contact__method"
-            aria-label="Envoyer un email &#224; {{ contact.email }}"
+            :aria-label="`Envoyer un email à ${contact.email}`"
           >
             <span class="contact__method-icon" aria-hidden="true">
               <svg

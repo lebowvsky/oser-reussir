@@ -32,7 +32,9 @@ const DEFAULT_POURQUOI: PourquoiData = {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: pourquoiRaw } = await useFetch<PourquoiData>(`${baseUrl}/pourquoi`)
+const { data: pourquoiRaw } = await useFetch<PourquoiData>(`${baseUrl}/pourquoi`, {
+  key: 'pourquoi',
+})
 const pourquoiData = computed(() => pourquoiRaw.value ?? DEFAULT_POURQUOI)
 
 const benefices = computed(() => [

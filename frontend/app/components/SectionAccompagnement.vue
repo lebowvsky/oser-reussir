@@ -40,7 +40,9 @@ const DEFAULT_ACCOMPAGNEMENT: AccompagnementData = {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: accompagnementRaw } = await useFetch<AccompagnementData>(`${baseUrl}/accompagnement`)
+const { data: accompagnementRaw } = await useFetch<AccompagnementData>(`${baseUrl}/accompagnement`, {
+  key: 'accompagnement',
+})
 const accompagnement = computed(() => accompagnementRaw.value ?? DEFAULT_ACCOMPAGNEMENT)
 
 const steps = computed(() => [

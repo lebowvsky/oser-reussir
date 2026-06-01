@@ -52,7 +52,9 @@ const DEFAULT_POURQUI: PourquiData = {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: pourquiRaw } = await useFetch<PourquiData>(`${baseUrl}/pourqui`)
+const { data: pourquiRaw } = await useFetch<PourquiData>(`${baseUrl}/pourqui`, {
+  key: 'pourqui',
+})
 const pourqui = computed(() => pourquiRaw.value ?? DEFAULT_POURQUI)
 
 const profils = computed(() => [

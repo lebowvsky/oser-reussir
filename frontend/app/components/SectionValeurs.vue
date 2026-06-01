@@ -40,7 +40,9 @@ const DEFAULT_VALEURS: ValeursData = {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: valeursRaw } = await useFetch<ValeursData>(`${baseUrl}/valeurs`)
+const { data: valeursRaw } = await useFetch<ValeursData>(`${baseUrl}/valeurs`, {
+  key: 'valeurs',
+})
 const valeursData = computed(() => valeursRaw.value ?? DEFAULT_VALEURS)
 
 const valeurs = computed(() => [

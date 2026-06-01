@@ -24,7 +24,9 @@ const DEFAULT_HERO: HeroData = {
 
 const config = useRuntimeConfig()
 const baseUrl = import.meta.server ? config.apiBaseServer : config.public.apiBase
-const { data: heroRaw } = await useFetch<HeroData>(`${baseUrl}/hero`)
+const { data: heroRaw } = await useFetch<HeroData>(`${baseUrl}/hero`, {
+  key: 'hero',
+})
 
 const hero = computed(() => heroRaw.value ?? DEFAULT_HERO)
 const titleSegments = computed(() => parseAccentTitle(hero.value.title))
