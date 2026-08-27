@@ -254,3 +254,6 @@ backend/uploads/*
 !backend/uploads/apropos/
 backend/uploads/apropos/*
 !backend/uploads/apropos/.gitkeep
+
+# Nuxt/Nitro build output
+.output
