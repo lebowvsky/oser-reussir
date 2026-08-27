@@ -47,7 +47,7 @@ const DEFAULT_POURQUI: PourquiData = {
   card5Text: 'Quand l\u2019orientation ou les apprentissages semblent flous, et que l\u2019on ne sait plus o\u00f9 aller.',
   card5Icon: 'compass',
   noteTag: 'Important',
-  noteMessage: '<strong>Le coaching n\u2019est pas du soutien scolaire.</strong> Il ne remplace pas les cours particuliers ni l\u2019aide aux devoirs\u00a0: il aide le jeune \u00e0 mieux se conna\u00eetre, \u00e0 identifier ce qui bloque et \u00e0 retrouver sa propre dynamique d\u2019apprentissage.',
+  noteMessage: '<p><strong>Le coaching n\u2019est pas du soutien scolaire.</strong> Il ne remplace pas les cours particuliers ni l\u2019aide aux devoirs\u00a0: il aide le jeune \u00e0 mieux se conna\u00eetre, \u00e0 identifier ce qui bloque et \u00e0 retrouver sa propre dynamique d\u2019apprentissage.</p>',
 }
 
 const config = useRuntimeConfig()
@@ -173,7 +173,7 @@ const profils = computed(() => [
 
       <aside class="pourqui__note" data-reveal>
         <span class="pourqui__note-tag" aria-hidden="true">{{ pourqui.noteTag }}</span>
-        <p v-html="pourqui.noteMessage"></p>
+        <div class="pourqui__note-message" v-html="pourqui.noteMessage"></div>
       </aside>
     </div>
   </section>
@@ -263,15 +263,22 @@ const profils = computed(() => [
   flex-shrink: 0;
 }
 
-.pourqui__note p {
+.pourqui__note-message {
+  flex: 1;
+  min-width: 0;
   font-size: $font-size-md;
   color: color("ink");
-  margin: 0;
-}
 
-.pourqui__note strong {
-  color: shade("primary", 16);
-  font-weight: 700;
+  /* Le contenu riche (TipTap) enveloppe le texte dans un <p> : on neutralise
+     sa marge par defaut, l'espacement est porte par .pourqui__note. */
+  :deep(p) {
+    margin: 0;
+  }
+
+  :deep(strong) {
+    color: shade("primary", 16);
+    font-weight: 700;
+  }
 }
 
 @include respond-above($breakpoint-sm) {
