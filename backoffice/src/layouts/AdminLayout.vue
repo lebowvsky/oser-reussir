@@ -8,6 +8,7 @@ import {
   Heart,
   HelpCircle,
   MessageSquareQuote,
+  BadgeEuro,
   Mail,
   Share2,
   LogOut,
@@ -30,6 +31,7 @@ const sectionLinks: readonly NavItem[] = [
   { label: 'Valeurs', to: '/admin/valeurs', icon: Heart },
   { label: 'Pourquoi ?', to: '/admin/pourquoi', icon: HelpCircle },
   { label: 'Témoignages', to: '/admin/temoignages', icon: MessageSquareQuote },
+  { label: 'Tarifs', to: '/admin/tarifs', icon: BadgeEuro },
   { label: 'Contact', to: '/admin/contact', icon: Mail },
 ]
 

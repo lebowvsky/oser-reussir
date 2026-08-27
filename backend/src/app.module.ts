@@ -11,6 +11,7 @@ import { AccompagnementModule } from './modules/accompagnement/accompagnement.mo
 import { ValeursModule } from './modules/valeurs/valeurs.module';
 import { PourquoiModule } from './modules/pourquoi/pourquoi.module';
 import { TemoignagesModule } from './modules/temoignages/temoignages.module';
+import { TarifsModule } from './modules/tarifs/tarifs.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
@@ -53,6 +54,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ValeursModule,
     PourquoiModule,
     TemoignagesModule,
+    TarifsModule,
     AuthModule,
   ],
   controllers: [HealthController],

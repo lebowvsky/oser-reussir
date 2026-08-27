@@ -9,14 +9,21 @@ interface NavAnchor {
   label: string
 }
 
-const anchors: readonly NavAnchor[] = [
+// L'ancre « Tarifs » ne doit exister que si la section est rendue :
+// SectionTarifs se masque quand la liste est vide, le lien mènerait alors
+// nulle part. Le composable partage la clé `useFetch` de la section, donc
+// aucune requête supplémentaire n'est émise.
+const { data: tarifs } = await useTarifs()
+
+const anchors = computed<readonly NavAnchor[]>(() => [
   { href: '#apropos', label: 'À propos' },
   { href: '#pourqui', label: 'Pour qui ?' },
   { href: '#accompagnement', label: 'Accompagnement' },
   { href: '#valeurs', label: 'Valeurs' },
   { href: '#pourquoi', label: 'Pourquoi ?' },
+  ...(tarifs.value.length ? [{ href: '#tarifs', label: 'Tarifs' }] : []),
   { href: '#contact', label: 'Contact' },
-] as const
+])
 
 const logoSrc = '/logo.png'
 const scrolled = ref<boolean>(false)
@@ -193,6 +200,7 @@ onBeforeUnmount(() => {
   font-weight: 600;
   color: color("ink-soft");
   padding: $spacing-2xs 0;
+  white-space: nowrap;
   transition: color $duration-fast $ease;
 }
 .navbar__link::after {
@@ -293,6 +301,16 @@ onBeforeUnmount(() => {
   .navbar__burger,
   .navbar__drawer {
     display: none;
+  }
+}
+
+/* Avec 7 entrées, la nav frôle la largeur disponible juste après le
+   breakpoint desktop : resserrer le seul gap suffit à tenir dans les ~656px
+   disponibles à 960px (≈ 460px de libellés + 6 × 16px de gap), la taille des
+   liens reste donc à $font-size-sm. */
+@media (min-width: 960px) and (max-width: 1099px) {
+  .navbar__list {
+    gap: $spacing-md;
   }
 }
 </style>
