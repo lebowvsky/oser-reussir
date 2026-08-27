@@ -42,6 +42,7 @@ useScrollReveal()
     <SectionValeurs />
     <SectionPourquoi />
     <SectionTemoignages />
+    <SectionTarifs />
     <SectionContact />
   </div>
 </template>
